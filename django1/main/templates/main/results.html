@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+{% if all_results_list %}
+    {% for result in all_results_list %}
+        <tr class='success'>
+            <td>{{ result.id }}</td>
+            <td>{{ result.blast_cell }}</td>
+            <td>{{ result.promyelocytes }}</td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+{% endblock %}

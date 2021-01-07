@@ -12,13 +12,14 @@ class Patient(models.Model):
 
 class Result(models.Model):
     """"Результаты"""
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     blast_cell = models.FloatField('Количество бластных клеток')
     promyelocytes = models.FloatField('Количество милеоцитов')
     neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
 
     def __str__(self):
-        return self.blast_cell
+        return str(self.blast_cell)
 
 class Normal_value(models.Model):
     """"Нормальные значения"""
@@ -38,4 +39,4 @@ class Deviation(models.Model):
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
 
     def __str__(self):
-        return self.blast_cell
+        return str(self.blast_cell)
