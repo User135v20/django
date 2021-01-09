@@ -19,12 +19,6 @@
             <td>{{ patient.patronymic }}</td>
             <td>{{ patient.created_at }}</td>
             <td>
-                <form action="{% url 'update_patient' pk=patient.id %}" method="PUT">
-                    {% csrf_token %}
-                    <input type="submit" value="update">
-                </form>
-            </td>
-            <td>
                 <form action="{% url 'delete_patient' pk=patient.id %}" method="DELETE">
                     {% csrf_token %}
                     <input type="submit" value="delete">

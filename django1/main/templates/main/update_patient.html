@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main/layout.html' %}
 
-</body>
-</html>
+{% block content %}
+<h4> Обновленные данных пациента </h4>
+<form action="update_patient" method="POST">
+    {% csrf_token %}
+    <p><label for="patient_id">Enter id: </label>
+    <input id="patient_id" type="text" name="patient_id"></p>
+
+    <p><label for="surname">Enter surname: </label>
+    <input id="surname" type="text" name="surname"></p>
+
+    <p><label for="name">Enter name: </label>
+    <input id="name" type="text" name="name"></p>
+
+    <p><label for="patronymic">Enter patronymic: </label>
+    <input id="patronymic" type="text" name="patronymic"></p>
+
+    <p><input type="submit" value="OK"></p>
+</form>
+
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
+{% endblock %}

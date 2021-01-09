@@ -1,24 +1,23 @@
 {% extends 'main/layout.html' %}
 
 {% block content %}
+<h4> Добавление пациента </h4>
 <form action="new_patient" method="POST">
     {% csrf_token %}
 
-    <label for="surname">Enter surname: </label>
-    <input id="surname" type="text" name="surname" value="Default name for team.">
+    <p><label for="surname">Enter surname: </label>
+    <input id="surname" type="text" name="surname"></p>
 
-    <label for="name">Enter name: </label>
-    <input id="name" type="text" name="name" value="Default name for team.">
+    <p><label for="name">Enter name: </label>
+    <input id="name" type="text" name="name"></p>
 
-    <label for="patronymic">Enter patronymic: </label>
-    <input id="patronymic" type="text" name="patronymic" value="Default name for team.">
+    <p><label for="patronymic">Enter patronymic: </label>
+    <input id="patronymic" type="text" name="patronymic"></p>
 
-    <input type="submit" value="OK">
+    <p><input type="submit" value="OK"></p>
 </form>
 
-<tr class='success'>
-    <td>{{ result.id }}</td>
-    <td>{{ result.name }}</td>
-    <td>{{ result.surname }}</td>
-</tr>
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
 {% endblock %}

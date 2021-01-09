@@ -4,10 +4,10 @@
 {% if is_new %}
 <h4> Добавлен пациент </h4>
 {% else %}
-<h4> Пациент </h4>
+<h4> Обновленные данные пациента </h4>
 {% endif %}
 {% if patient %}
-    <table cellspacing="0" cellpadding="0" id="maket">
+    <table>
         <tr>
             <td>id </td>
             <td>{{ patient.id }}</td>
