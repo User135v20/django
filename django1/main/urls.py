@@ -7,4 +7,5 @@ urlpatterns = [
     path('patients', views.patients, name='patients'),
     path('new_patient', views.new_patient, name='new_patient'),
     path('delete_patient/(?P<pk>[0-9]+)/$', views.delete_patient, name='delete_patient'),
+    path('update_patient/(?P<pk>[0-9]+)/$', views.delete_patient, name='update_patient'),
 ]
