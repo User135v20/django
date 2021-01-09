@@ -21,22 +21,15 @@ class Result(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
     blast_cell = models.FloatField('Количество бластных клеток')
+    blast_cell_deviation = models.FloatField('Количество бластных клеток')
     promyelocytes = models.FloatField('Количество милеоцитов')
+    promyelocytes_deviation = models.FloatField('Количество милеоцитов')
     neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
+    neutrophils_myelocytes_deviation = models.FloatField('Количество нейтрофилов')
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
+    neutrphils_metamyelocytes_deviation = models.FloatField('Количество нейтрофилов')
 
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.blast_cell)
-
-
-class Deviation(models.Model):
-    """"Отклонения"""
-    blast_cell = models.FloatField('Количество бластных клеток')
-    promyelocytes = models.FloatField('Количество милеоцитов')
-    neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
-    neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
-
-    def __str__(self):
-        return str(self.blast_cell)
+        return str(self.id)

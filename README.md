@@ -10,13 +10,19 @@
 админка
  ```http://127.0.0.1:8000/admin```
  
+создание админа для админки
+```python manage.py createsuperuser```
+ 
  показать все миграции
  ```python manage.py showmigrations```
  
 откатить все миграции
 ```python manage.py migrate main zero```
 
-откатить миграцию до предудущей
+откатить миграцию до нйжной
+```python manage.py migrate main 0004```
+
+создание миграций
 ```python manage.py makemigrations```
  
  

@@ -1,7 +1,7 @@
 {% extends 'main/layout.html' %}
 
 {% block content %}
-<h4> Обновленные данных пациента </h4>
+<h4> Обновление данных пациента </h4>
 <form action="update_patient" method="POST">
     {% csrf_token %}
     <p><label for="patient_id">Enter id: </label>

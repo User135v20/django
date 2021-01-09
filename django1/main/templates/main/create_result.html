@@ -1,0 +1,29 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<h4> Добавление пациента </h4>
+<form action="create_result" method="POST">
+    {% csrf_token %}
+
+    <p><label for="patient_id">Id пациента: </label>
+    <input id="patient_id" type="text" name="patient_id"></p>
+
+    <p><label for="blast_cell">Количество бластных клеток: </label>
+    <input id="blast_cell" type="text" name="blast_cell"></p>
+
+    <p><label for="promyelocytes">Количество милеоцитов: </label>
+    <input id="promyelocytes" type="text" name="promyelocytes"></p>
+
+    <p><label for="neutrophils_myelocytes">Количество нейтрофилов: </label>
+    <input id="neutrophils_myelocytes" type="text" name="neutrophils_myelocytes"></p>
+
+    <p><label for="neutrphils_metamyelocytes">Нейтрофилы: Миелоциты: </label>
+    <input id="neutrphils_metamyelocytes" type="text" name="neutrphils_metamyelocytes"></p>
+
+    <p><input type="submit" value="OK"></p>
+</form>
+
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
+{% endblock %}

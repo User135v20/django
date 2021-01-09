@@ -1,14 +1,9 @@
-from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render
-from .forms import PatientForm, UpdatePatientForm
-from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponse, HttpResponseNotFound
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
 
-# Create your views here.
+from .forms import PatientForm, UpdatePatientForm, ResultForm
 from .models import Result, Patient
+from .settings import NORMAL_MEASURE
 
 
 def index(request):
@@ -19,9 +14,54 @@ def about(request):
     return render(request, 'main/about.html')
 
 
-def results(request):
-    results = Result.objects.all()
-    return render(request, 'main/results.html', {'all_results_list': results})
+class ResultView:
+    @staticmethod
+    def list(request):
+        query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+        results = Result.objects.filter(
+            patient__surname__contains=query_parameter) if query_parameter else Result.objects.all()
+        return render(request, 'main/results.html', {'all_results_list': results})
+
+    @staticmethod
+    def get(request, pk):
+        result = Result.objects.get(id=pk)
+        for k, v in normal_str_range().items():
+            setattr(result, k + "_norma", v)
+        return render(request, 'main/result.html', {'result': result})
+
+    @staticmethod
+    @csrf_protect
+    def create(request):
+        if request.method == "POST":
+            input_result_data = ResultForm(request.POST)
+            if input_result_data.is_valid() is False:
+                return render(request, 'main/create_result.html',
+                              {'error_message': "Ошибка: Все поля должны быть заполнены."})
+
+            data = input_result_data.cleaned_data
+            patients = Patient.objects.filter(id=int(data['patient_id']))
+            if not patients:
+                return render(request, 'main/create_result.html',
+                              {'error_message': "Ошибка: такого пациента не существует."})
+            patient = patients[0]
+            normal_range_ = normal_str_range()
+            for k in normal_range_.keys():
+                deviation = 0
+                if data[k] > NORMAL_MEASURE[k + "_max"]:
+                    deviation = data[k] + NORMAL_MEASURE[k + "_max"]
+                if data[k] < NORMAL_MEASURE[k + "_min"]:
+                    deviation = -data[k] + NORMAL_MEASURE[k + "_min"]
+                data[k + '_deviation'] = deviation
+            data['patient'] = patient
+            del data['patient_id']
+            result = Result(
+                **data
+            )
+            result.save()
+            for k, v in normal_range_.items():
+                setattr(result, k + '_norma', v)
+            return render(request, 'main/result.html', {'result': result})
+        return render(request, 'main/create_result.html')
 
 
 class PatientView:
@@ -43,11 +83,13 @@ class PatientView:
         if request.method == "POST":
             input_patient_data = UpdatePatientForm(request.POST)
             if input_patient_data.is_valid() is False:
-                return render(request, 'main/update_patient.html', {'error_message': "Ошибка: Все поля должны быть заполнены."})
-            pk=int(input_patient_data.cleaned_data['patient_id'])
+                return render(request, 'main/update_patient.html',
+                              {'error_message': "Ошибка: Все поля должны быть заполнены."})
+            pk = int(input_patient_data.cleaned_data['patient_id'])
             patient = Patient.objects.get(id=pk)
             if not patient:
-                return render(request, 'main/update_patient.html', {'error_message': "Ошибка: такого пациента не существует."})
+                return render(request, 'main/update_patient.html',
+                              {'error_message': "Ошибка: такого пациента не существует."})
             data = {k: v for k, v in input_patient_data.cleaned_data.items() if k != "patient_id" and v}
             Patient.objects.filter(id=pk).update(**data)
             patient = Patient.objects.get(id=pk)
@@ -68,3 +110,8 @@ class PatientView:
             new_patient.save()
             return render(request, 'main/patient.html', {'patient': new_patient, 'is_new': True})
         return render(request, 'main/new_patient.html')
+
+
+def normal_str_range():
+    names = {k[: -4] for k in NORMAL_MEASURE}
+    return {k: str(NORMAL_MEASURE[k + '_min']) + " - " + str(NORMAL_MEASURE[k + '_max']) for k in names}

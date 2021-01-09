@@ -3,7 +3,10 @@ from . import views
 urlpatterns = [
     path('', views.index, name='home'),
     path('about', views.about, name='about'),
-    path('results', views.results, name='all_results'),
+
+    path('create_result', views.ResultView.create, name='create_result'),
+    path('results', views.ResultView.list, name='all_results'),
+    path('result/(?P<pk>[0-9]+)/$', views.ResultView.get, name='result'),
 
     path('patients', views.PatientView.list, name='patients'),
     path('new_patient', views.PatientView.create, name='new_patient'),

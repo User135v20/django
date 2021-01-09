@@ -1,14 +1,8 @@
 from django import forms
+
 from .models import Patient
 
-# первый варик
-#class PatientForm(forms.Form):
-    # surname = forms.CharField(max_length=50)
-    # name = forms.CharField(max_length=50)
-    # patronymic = forms.CharField(max_length=50)
 
-
-# второй варик
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
@@ -21,3 +15,11 @@ class UpdatePatientForm(forms.Form):
     name = forms.CharField(required=False)
     patronymic = forms.CharField(required=False)
 
+
+class ResultForm(forms.Form):
+    patient_id = forms.IntegerField()
+
+    blast_cell = forms.FloatField()
+    promyelocytes = forms.FloatField()
+    neutrophils_myelocytes = forms.FloatField()
+    neutrphils_metamyelocytes = forms.FloatField()
