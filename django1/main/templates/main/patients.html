@@ -18,6 +18,15 @@
             <td>{{ patient.name }}</td>
             <td>{{ patient.patronymic }}</td>
             <td>{{ patient.created_at }}</td>
+            <td>
+
+                <form action="{% url 'delete_patient' pk=patient.id %}" method="delete">
+                    {% csrf_token %}
+                    <input type="submit" value="delete">
+                </form>
+
+
+            </td>
         </tr>
         {% endfor %}
     </table>

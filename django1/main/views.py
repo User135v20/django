@@ -3,6 +3,9 @@ from django.shortcuts import render
 from .forms import PatientForm
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse, HttpResponseNotFound
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
 
 # Create your views here.
 from .models import Result, Patient
@@ -26,6 +29,15 @@ def results(request):
 def patients(request):
     results = Patient.objects.all()
     return render(request, 'main/patients.html', {'patients': results})
+
+
+def delete_patient(request, pk = None):
+    patient = Patient.objects.get(id=pk)
+    if not patient:
+        return Http404()
+    patient.delete()
+    patients = Patient.objects.all()
+    return render(request, 'main/patients.html', {'patients': patients})
 
 
 @csrf_protect
