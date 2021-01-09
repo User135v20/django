@@ -3,17 +3,10 @@ from django.utils import timezone
 
 # Create your models here.
 
-class AutoDateTimeField(models.DateTimeField):
-    def pre_save(self, model_instance, add):
-        return timezone.now()
-
-    created_at = models.DateField(default=timezone.now)
-    updated_at = models.DateTimeField(default=timezone.now)
-
-class Patient(models.Model, AutoDateTimeField):
+class Patient(models.Model):
     """Пациент"""
     surname = models.CharField('Фамилия', max_length=50)
-    name = models.CharField('Имя', max_length=50)
+    name = models.CharField('Имя', max_length=50, null=True)
     patronymic = models.CharField('Отчество', max_length=50)
 
     created_at = models.DateTimeField(default=timezone.now)
@@ -21,7 +14,7 @@ class Patient(models.Model, AutoDateTimeField):
     def __str__(self):
         return self.surname
 
-class Result(models.Model, AutoDateTimeField):
+class Result(models.Model):
     """"Результаты"""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, default=None)
 

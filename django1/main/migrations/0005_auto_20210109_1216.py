@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='result',
             name='patient',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main.patient'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main.patient', default=None),
         ),
     ]

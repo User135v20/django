@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+{% if is_new %}
+<h4> Добавлен пациент </h4>
+{% else %}
+<h4> Пациент </h4>
+{% endif %}
+{% if patient %}
+    <table cellspacing="0" cellpadding="0" id="maket">
+        <tr>
+            <td>id </td>
+            <td>{{ patient.id }}</td>
+        </tr>
+        <tr>
+            <td>surname </td>
+            <td>{{ patient.surname }}</td>
+        </tr>
+        <tr>
+            <td>name </td>
+            <td>{{ patient.name }}</td>
+        </tr>
+        <tr>
+            <td>patronymic </td>
+            <td>{{ patient.patronymic }}</td>
+        </tr>
+        <tr>
+            <td>created </td>
+            <td>{{ patient.created_at }}</td>
+        </tr>
+    </table>
+{% else %}
+    <p>Patient not exists.</p>
+{% endif %}
+{% endblock %}
