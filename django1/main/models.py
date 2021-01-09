@@ -23,7 +23,7 @@ class Patient(models.Model, AutoDateTimeField):
 
 class Result(models.Model, AutoDateTimeField):
     """"Результаты"""
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, default=None)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, default=None)
 
     blast_cell = models.FloatField('Количество бластных клеток')
     promyelocytes = models.FloatField('Количество милеоцитов')
