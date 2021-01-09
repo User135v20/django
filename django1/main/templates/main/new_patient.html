@@ -3,12 +3,16 @@
 {% block content %}
 <form action="new_patient" method="POST">
     {% csrf_token %}
+
     <label for="surname">Enter surname: </label>
     <input id="surname" type="text" name="surname" value="Default name for team.">
+
     <label for="name">Enter name: </label>
     <input id="name" type="text" name="name" value="Default name for team.">
+
     <label for="patronymic">Enter patronymic: </label>
     <input id="patronymic" type="text" name="patronymic" value="Default name for team.">
+
     <input type="submit" value="OK">
 </form>
 

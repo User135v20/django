@@ -22,6 +22,12 @@ def results(request):
         raise Http404("Results does not exist")
     return render(request, 'main/results.html', {'all_results_list': results})
 
+
+def patients(request):
+    results = Patient.objects.all()
+    return render(request, 'main/patients.html', {'patients': results})
+
+
 @csrf_protect
 def new_patient(request):
     if request.method == "POST":
