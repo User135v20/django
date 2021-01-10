@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
-from .forms import PatientForm, UpdatePatientForm, ResultForm
+from .forms import PatientForm, UpdatePatientForm, ResultForm, UpdateResultForm
 from .models import Result, Patient
 from .settings import NORMAL_MEASURE
 
@@ -69,6 +69,49 @@ class ResultView:
         result.delete()
         results = Result.objects.all()
         return render(request, 'main/results.html', {'all_results_list': results})
+
+    @staticmethod
+    @csrf_protect
+    def update(request):
+        if request.method == "POST":
+            input_result_data = UpdateResultForm(request.POST)
+            if input_result_data.is_valid() is False:
+                return render(request, 'main/update_result.html',
+                              {'error_message': "Ошибка: ошибка в врдимых данных."})
+            patient_id = input_result_data.cleaned_data['patient_id']
+            if patient_id:
+                patients = Patient.objects.filter(id=patient_id)
+                if not patients:
+                    return render(request, 'main/update_result.html',
+                                  {'error_message': "Ошибка: такого пациента не существует."})
+            id_ = int(input_result_data.cleaned_data['id'])
+            results = Result.objects.filter(id=id_)
+            if not results:
+                return render(request, 'main/update_result.html',
+                              {'error_message': "Ошибка: такого результата не существует."})
+            result = results[0]
+            data = {k: v for k, v in input_result_data.cleaned_data.items() if k != "id" and v}
+            if 'patient_id' in data and data['patient_id'] != result.patient.id:
+                data['patient'] = patients[0]
+                del data['patient_id']
+
+            normal_range_ = normal_str_range()
+            for k in normal_range_.keys():
+                if k not in data.keys():
+                    continue
+                deviation = 0
+                if data[k] > NORMAL_MEASURE[k + "_max"]:
+                    deviation = data[k] - NORMAL_MEASURE[k + "_max"]
+                if data[k] < NORMAL_MEASURE[k + "_min"]:
+                    deviation = -data[k] + NORMAL_MEASURE[k + "_min"]
+                data[k + '_deviation'] = deviation
+
+            Result.objects.filter(id=id_).update(**data)
+            result = Result.objects.get(id=id_)
+            for k, v in normal_range_.items():
+                setattr(result, k + '_norma', v)
+            return render(request, 'main/result.html', {'result': result})
+        return render(request, 'main/update_result.html')
 
 
 class PatientView:

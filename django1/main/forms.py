@@ -23,3 +23,12 @@ class ResultForm(forms.Form):
     promyelocytes = forms.FloatField()
     neutrophils_myelocytes = forms.FloatField()
     neutrphils_metamyelocytes = forms.FloatField()
+
+
+class UpdateResultForm(forms.Form):
+    id = forms.IntegerField()
+    patient_id = forms.IntegerField(required=False)
+    blast_cell = forms.FloatField(required=False)
+    promyelocytes = forms.FloatField(required=False)
+    neutrophils_myelocytes = forms.FloatField(required=False)
+    neutrphils_metamyelocytes = forms.FloatField(required=False)

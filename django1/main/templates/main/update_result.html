@@ -1,9 +1,11 @@
 {% extends 'main/layout.html' %}
 
 {% block content %}
-<h4> Добавление результата </h4>
-<form action="create_result" method="POST">
+<h4> Исправление результата </h4>
+<form action="update_result" method="POST">
     {% csrf_token %}
+    <p><label for="id">Id: </label>
+    <input id="id" type="text" name="id"></p>
 
     <p><label for="patient_id">Id пациента: </label>
     <input id="patient_id" type="text" name="patient_id"></p>
