@@ -40,6 +40,10 @@
 
 
 </table>
+<form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
+    {% csrf_token %}
+    <input type="submit" value="delete">
+</form>
 {% else %}
     <p>Результат не найден.</p>
 {% endif %}

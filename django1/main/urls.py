@@ -7,6 +7,7 @@ urlpatterns = [
     path('create_result', views.ResultView.create, name='create_result'),
     path('results', views.ResultView.list, name='all_results'),
     path('result/(?P<pk>[0-9]+)/$', views.ResultView.get, name='result'),
+    path('delete_result/(?P<pk>[0-9]+)/$', views.ResultView.delete, name='delete_result'),
 
     path('patients', views.PatientView.list, name='patients'),
     path('new_patient', views.PatientView.create, name='new_patient'),

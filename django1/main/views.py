@@ -48,7 +48,7 @@ class ResultView:
             for k in normal_range_.keys():
                 deviation = 0
                 if data[k] > NORMAL_MEASURE[k + "_max"]:
-                    deviation = data[k] + NORMAL_MEASURE[k + "_max"]
+                    deviation = data[k] - NORMAL_MEASURE[k + "_max"]
                 if data[k] < NORMAL_MEASURE[k + "_min"]:
                     deviation = -data[k] + NORMAL_MEASURE[k + "_min"]
                 data[k + '_deviation'] = deviation
@@ -62,6 +62,13 @@ class ResultView:
                 setattr(result, k + '_norma', v)
             return render(request, 'main/result.html', {'result': result})
         return render(request, 'main/create_result.html')
+
+    @staticmethod
+    def delete(request, pk=None):
+        result = Result.objects.get(id=pk)
+        result.delete()
+        results = Result.objects.all()
+        return render(request, 'main/results.html', {'all_results_list': results})
 
 
 class PatientView:

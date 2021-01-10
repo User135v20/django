@@ -23,10 +23,16 @@
             <td>{{result.patient.surname}} {{result.patient.name}} {{result.patient.patronymic}} </td>
             <td>{{ result.created_at }}</td>
             <td><a href="{% url 'result' pk=result.id %}"><li>подробнее</li></a></td>
+            <td>
+                <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
+                    {% csrf_token %}
+                    <input type="submit" value="delete">
+                </form>
+            </td>
         </tr>
     {% endfor %}
     </table>
 {% else %}
-    <p>Результаты отсутстуют, как и мозги у некоторых))</p>
+    <p>Результаты отсутсвуют.</p>
 {% endif %}
 {% endblock %}
