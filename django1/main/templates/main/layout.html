@@ -16,13 +16,14 @@
     <h3>навигация</h3>
     <ul>
         <a href="{% url 'home' %}"><li>Главная</li></a>
-        <a href="{% url 'about' %}"><li>О нас</li></a>
+        <a href="{% url 'Patient_database' %}"><li>Пациенты</li></a>
         <a href=""><li>контакты</li></a>
 
     </ul>
 </aside>
-    <main>
+    <main style="color: #fff">
     {% block content%}
+
     {% endblock %}
     </main>
 </body>

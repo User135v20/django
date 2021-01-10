@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Patient(models.Model):
     """Пациент"""
@@ -7,20 +8,22 @@ class Patient(models.Model):
     name = models.CharField('Имя', max_length=50)
     patronymic = models.CharField('Отчество', max_length=50)
 
+
     def __str__(self):
-        return self.surname
+        return str(self.surname)
 
 class Result(models.Model):
     """"Результаты"""
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     blast_cell = models.FloatField('Количество бластных клеток')
     promyelocytes = models.FloatField('Количество милеоцитов')
     neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
 
     def __str__(self):
-        return self.blast_cell
+        return str(self.patient)
 
-class Normal_value(models.Model):
+class Normal_values(models.Model):
     """"Нормальные значения"""
     blast_cell = models.FloatField('Количество бластных клеток', default=0.5)
     promyelocytes = models.FloatField('Количество милеоцитов', default=0.4)
@@ -28,7 +31,7 @@ class Normal_value(models.Model):
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты', default=0.2)
 
     def __str__(self):
-        return self.blast_cell
+        return str(self.blast_cell)
 
 class Deviation(models.Model):
     """"Отклонения"""
@@ -38,4 +41,4 @@ class Deviation(models.Model):
     neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
 
     def __str__(self):
-        return self.blast_cell
+        return str(self.blast_cell)

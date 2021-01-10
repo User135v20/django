@@ -25,5 +25,13 @@ border-right: 5px solid #4d4d4d;
 color: #fff;
 text-decoration: none;
 transform: scale(1.05);
-
  }
+
+.alert-warning
+{
+    float: left;
+    clear: both;
+    width: 400px;
+    margin: 34%;
+    text-align: left;
+}
