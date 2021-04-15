@@ -16,14 +16,24 @@
     <h3>навигация</h3>
     <ul>
         <a href="{% url 'home' %}"><li>Главная</li></a>
-        <a href="{% url 'Patient_database' %}"><li>Пациенты</li></a>
-        <a href=""><li>контакты</li></a>
+        <a href="{% url 'about' %}"><li>О нас</li></a>
 
     </ul>
+    <hr>
+    <ul>
+        <a href="{% url 'patients' %}"><li>Пользователи</li></a>
+        <a href="{% url 'all_results' %}"><li>Снимки</li></a>
+    </ul>
+    <hr>
+    <ul>
+        <a href="{% url 'new_patient' %}"><li>Добавить пользователя</li></a>
+        <a href="{% url 'update_patient' %}"><li>Изменить данные пользователя</li></a>
+        <a href="{% url 'create_result' %}"><li>Добавить описание снимка</li></a>
+        <a href="{% url 'update_result' %}"><li>Изменить описание снимка</li></a>
+    </ul>
 </aside>
-    <main style="color: #fff">
+    <main style="color:#ffffff">
     {% block content%}
-
     {% endblock %}
     </main>
 </body>

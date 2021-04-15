@@ -1,44 +1,44 @@
 from django.db import models
-
+from django.utils import timezone
 
 # Create your models here.
+
 class Patient(models.Model):
     """Пациент"""
     surname = models.CharField('Фамилия', max_length=50)
     name = models.CharField('Имя', max_length=50)
     patronymic = models.CharField('Отчество', max_length=50)
+    position_at_work = models.CharField('Должность', max_length=50, null=True)
 
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.surname)
+        return self.surname
+
+class Image(models.Model):
+    """"Изображение"""
+    image = models.ImageField("Изображение", upload_to="image/")
+
+    created_at = models.DateTimeField(default=timezone.now)
 
 class Result(models.Model):
-    """"Результаты"""
+    """"Описание снимка"""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    blast_cell = models.FloatField('Количество бластных клеток')
-    promyelocytes = models.FloatField('Количество милеоцитов')
-    neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
-    neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+
+    structure_asymmetry = models.BooleanField("Ассиметрия пигментации\строения", default=False)
+    blue_white_structures = models.BooleanField("Наличие бело-голубых структур", default=False)
+    atypical_pigment_network = models.BooleanField("Атипичная пигментная сеть", default=False)
+    radial_radiance = models.BooleanField("Радиальная лучистость", default=False)
+    points = models.BooleanField("Наличие точек", default=False)
+
+    created_at = models.DateTimeField(default=timezone.now)
+class Diagnosis(models.Model):
+    """"Предварительный диагноз"""
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+
+    diagnose = models.CharField('Предварительный диагноз', max_length=150)
 
     def __str__(self):
-        return str(self.patient)
-
-class Normal_values(models.Model):
-    """"Нормальные значения"""
-    blast_cell = models.FloatField('Количество бластных клеток', default=0.5)
-    promyelocytes = models.FloatField('Количество милеоцитов', default=0.4)
-    neutrophils_myelocytes = models.FloatField('Количество нейтрофилов', default=0.3)
-    neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты', default=0.2)
-
-    def __str__(self):
-        return str(self.blast_cell)
-
-class Deviation(models.Model):
-    """"Отклонения"""
-    blast_cell = models.FloatField('Количество бластных клеток')
-    promyelocytes = models.FloatField('Количество милеоцитов')
-    neutrophils_myelocytes = models.FloatField('Количество нейтрофилов')
-    neutrphils_metamyelocytes = models.FloatField('Нейтрофилы: Миелоциты')
-
-    def __str__(self):
-        return str(self.blast_cell)
+        return str(self.id)
