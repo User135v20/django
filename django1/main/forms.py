@@ -1,12 +1,18 @@
 from django import forms
 
 from .models import Patient
+from .models import Image
 
 
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['surname', 'name', 'patronymic','position_at_work']
+
+class ImageForm(forms.ModelForm):
+    image = forms.ImageField()
+
+
 
 
 class UpdatePatientForm(forms.Form):
@@ -20,11 +26,7 @@ class UpdatePatientForm(forms.Form):
 
 class ResultForm(forms.Form):
     patient_id = forms.IntegerField()
-
-    # blast_cell = forms.FloatField()
-    # promyelocytes = forms.FloatField()
-    # neutrophils_myelocytes = forms.FloatField()
-    # neutrphils_metamyelocytes = forms.FloatField()
+    image_id = forms.IntegerField()
 
     structure_asymmetry = forms.BooleanField(required=False)
     blue_white_structures = forms.BooleanField(required=False)
@@ -36,10 +38,7 @@ class ResultForm(forms.Form):
 class UpdateResultForm(forms.Form):
     id = forms.IntegerField()
     patient_id = forms.IntegerField(required=False)
-    # blast_cell = forms.FloatField(required=False)
-    # promyelocytes = forms.FloatField(required=False)
-    # neutrophils_myelocytes = forms.FloatField(required=False)
-    # neutrphils_metamyelocytes = forms.FloatField(required=False)
+
     structure_asymmetry = forms.BooleanField(required=True)
     blue_white_structures = forms.BooleanField(required=True)
     atypical_pigment_network = forms.BooleanField(required=True)

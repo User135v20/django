@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
 from .forms import PatientForm, UpdatePatientForm, ResultForm, UpdateResultForm
-from .models import Result, Patient
+from .models import Result, Patient,Image
 from .settings import NORMAL_MEASURE
 
 
@@ -42,7 +42,14 @@ class ResultView:
             patients = Patient.objects.filter(id=int(data['patient_id']))
             if not patients:
                 return render(request, 'main/create_result.html',
-                              {'error_message': "Ошибка: такого пациента не существует."})
+                              {'error_message': "Ошибка: такого пользователя не существует."})
+
+
+            images = Image.objects.filter(id=int(data['image_id']))
+            if not images:
+                return render(request, 'main/create_result.html',
+                              {'error_message': "Ошибка: такого изображения не существует."})
+
             patient = patients[0]
             normal_range_ = normal_str_range()
             for k in normal_range_.keys():
@@ -77,13 +84,13 @@ class ResultView:
             input_result_data = UpdateResultForm(request.POST)
             if input_result_data.is_valid() is False:
                 return render(request, 'main/update_result.html',
-                              {'error_message': "Ошибка: ошибка в врдимых данных."})
+                              {'error_message': "Ошибка: ошибка в водимых данных."})
             patient_id = input_result_data.cleaned_data['patient_id']
             if patient_id:
                 patients = Patient.objects.filter(id=patient_id)
                 if not patients:
                     return render(request, 'main/update_result.html',
-                                  {'error_message': "Ошибка: такого пациента не существует."})
+                                  {'error_message': "Ошибка: такого пользователя не существует."})
             id_ = int(input_result_data.cleaned_data['id'])
             results = Result.objects.filter(id=id_)
             if not results:
@@ -139,7 +146,7 @@ class PatientView:
             patient = Patient.objects.get(id=pk)
             if not patient:
                 return render(request, 'main/update_patient.html',
-                              {'error_message': "Ошибка: такого пациента не существует."})
+                              {'error_message': "Ошибка: такого пользователя не существует."})
             data = {k: v for k, v in input_patient_data.cleaned_data.items() if k != "patient_id" and v}
             Patient.objects.filter(id=pk).update(**data)
             patient = Patient.objects.get(id=pk)
