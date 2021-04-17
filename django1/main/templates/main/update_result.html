@@ -1,0 +1,34 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<h4> Исправление результата </h4>
+<form action="update_result" method="POST">
+    {% csrf_token %}
+    <p><label for="patient_id">Id Пользователя: </label>
+    <input id="patient_id" type="text" name="patient_id"></p>
+
+    <p><label for="image_id">Id изображения: </label>
+    <input id="image_id" type="text" name="image_id"></p>
+
+    <p><label for="structure_asymmetry">Асиметрия строения\пигментации : </label>
+    <input id="structure_asymmetry" type="checkbox" name="structure_asymmetry"></p>
+
+    <p><label for="blue_white_structures">Наличие бело-голубых структур : </label>
+    <input id="blue_white_structures" type="checkbox" name="blue_white_structures"></p>
+
+    <p><label for="atypical_pigment_network">Атипичная пигментная сеть : </label>
+    <input id="atypical_pigment_network" type="checkbox" name="atypical_pigment_network"></p>
+
+    <p><label for="radial_radiance">Радиальная лучистость : </label>
+    <input id="radial_radiance" type="checkbox" name="radial_radiance"></p>
+
+    <p><label for="points">Наличие точек : </label>
+    <input id="points" type="checkbox" name="points"></p>
+
+    <p><input type="submit" value="OK"></p>
+</form>
+
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
+{% endblock %}

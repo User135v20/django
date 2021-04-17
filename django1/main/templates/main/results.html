@@ -1,0 +1,38 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<h4> Результаты </h4>
+<form action="results" method="GET">
+    {% csrf_token %}
+    <p><label for="surname">Input surname: </label>
+    <input id="surname" type="text" name="surname"><input type="submit" value="filter"></p>
+</form>
+
+{% if all_results_list %}
+    <table>
+        <tr class='success'>
+            <td>id</td>
+            <td>пациент</td>
+            <td>время создания</td>
+            <td></td>
+        </tr>
+    {% for result in all_results_list %}
+
+        <tr class='success'>
+            <td>{{ result.id }}</td>
+            <td>{{result.patient.surname}} {{result.patient.name}} {{result.patient.patronymic}}{{result.patient.position_at_work }} </td>
+            <td>{{ result.created_at }}</td>
+            <td><a href="{% url 'result' pk=result.id %}"><li>подробнее</li></a></td>
+            <td>
+                <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
+                    {% csrf_token %}
+                    <input type="submit" value="delete">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>Результаты отсутсвуют.</p>
+{% endif %}
+{% endblock %}

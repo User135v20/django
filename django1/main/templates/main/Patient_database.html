@@ -1,0 +1,18 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+
+    <h1>База данных</h1>
+    <p>какой-то текст какой-то текст какой-то текст какой-то текст какой-то текст какой-то текст какой-то текст </p>
+    {% for Patient in Patients %}
+        <div>
+            <tr class='success'>
+                <td>{{ Patient.id }}</td>
+                <td>{{ Patient.name }}</td>
+                <td>{{ Patient.surname }}</td>
+                <td>{{ Patient.position_at_work }}</td>
+            </tr>
+             </div>
+{% endfor %}
+
+{% endblock %}

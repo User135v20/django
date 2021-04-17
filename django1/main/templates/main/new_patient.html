@@ -1,0 +1,26 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<h4> Добавление пациента </h4>
+<form action="new_patient" method="POST">
+    {% csrf_token %}
+
+    <p><label for="surname">Фамилия: </label>
+    <input id="surname" type="text" name="surname"></p>
+
+    <p><label for="name">Имя: </label>
+    <input id="name" type="text" name="name"></p>
+
+    <p><label for="patronymic">Отчество: </label>
+    <input id="patronymic" type="text" name="patronymic"></p>
+
+    <p><label for="position_at_work">Должность: </label>
+    <input id="position_at_work" type="text" name="position_at_work"></p>
+
+    <p><input type="submit" value="OK"></p>
+</form>
+
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
+{% endblock %}

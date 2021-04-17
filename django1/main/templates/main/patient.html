@@ -1,0 +1,39 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+{% if is_new %}
+<h4> Добавлен пациент </h4>
+{% else %}
+<h4> Обновленные данные пациента </h4>
+{% endif %}
+{% if patient %}
+    <table>
+        <tr>
+            <td>id </td>
+            <td>{{ patient.id }}</td>
+        </tr>
+        <tr>
+            <td>surname </td>
+            <td>{{ patient.surname }}</td>
+        </tr>
+        <tr>
+            <td>name </td>
+            <td>{{ patient.name }}</td>
+        </tr>
+        <tr>
+            <td>patronymic </td>
+            <td>{{ patient.patronymic }}</td>
+        </tr>
+        <tr>
+            <td>position at work </td>
+            <td>{{ patient.position_at_work }}</td>
+        </tr>
+        <tr>
+            <td>created </td>
+            <td>{{ patient.created_at }}</td>
+        </tr>
+    </table>
+{% else %}
+    <p>Patient not exists.</p>
+{% endif %}
+{% endblock %}
