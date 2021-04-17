@@ -1,5 +1,9 @@
+from django.conf.urls.static import static
 from django.urls import path
+
 from . import views
+from .settings import MEDIA_URL, MEDIA_DIR
+
 urlpatterns = [
     path('', views.index, name='home'),
     path('about', views.about, name='about'),
@@ -16,3 +20,8 @@ urlpatterns = [
     path('update_patient', views.PatientView.update, name='update_patient'),
 
 ]
+
+
+
+
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_DIR)
