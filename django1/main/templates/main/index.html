@@ -1,11 +1,12 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
 {% block content %}
 <h3>Главная страница</h3>
 <p> примеры изображений с отличительными признаками </p>
 
 <div>
-    <img src="\1.jpg" class="img-fluid" width="189" height="255" alt="lorem">
+<!--    <img src="\1.jpg" class="img-fluid" width="189" height="255" alt="lorem">-->
+    <img src="{% static 'main/image/1.jpg' %}" width="30" height="30"/>
 </div>
-
 {% endblock %}
