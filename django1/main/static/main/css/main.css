@@ -25,5 +25,10 @@ border-right: 5px solid #4d4d4d;
 color: #fff;
 text-decoration: none;
 transform: scale(1.05);
-
  }
+
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
