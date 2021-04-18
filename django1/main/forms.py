@@ -10,10 +10,9 @@ class PatientForm(forms.ModelForm):
         fields = ['surname', 'name', 'patronymic','position_at_work']
 
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Image
-        fields = ('image', )
+class ImageForm(forms.Form):
+    patient_id = forms.IntegerField(required=True)
+    image = forms.ImageField(required=True)
 
 
 class UpdatePatientForm(forms.Form):

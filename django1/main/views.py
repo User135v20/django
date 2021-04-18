@@ -168,6 +168,7 @@ class PatientView:
             return render(request, 'main/patient.html', {'patient': new_patient, 'is_new': True})
         return render(request, 'main/new_patient.html')
 
+
 class ImageView:
     @staticmethod
     @csrf_protect
@@ -176,10 +177,17 @@ class ImageView:
         if request.method == 'POST':
             form = ImageForm(request.POST, request.FILES)
             if form.is_valid():
-                form.save()
-                # Get the current instance object to display in the template
-                img_obj = form.instance
-                return render(request, 'main/add_image.html', {'form': form, 'img_obj': img_obj})
+                patient_id = form.cleaned_data['patient_id']
+                patient = Patient.objects.filter(id=patient_id)
+                if not patient:
+                    return render(request, 'main/add_image.html',
+                                  {'error_message': "Ошибка: такого пользователя не существует."})
+                patient = patient[0]
+                data = {k: v for k, v in form.cleaned_data.items() if k != "patient_id" and v}
+                data['patient'] = patient
+                image = Image(**data)
+                image.save()
+                return render(request, 'main/add_image.html', {'form': form, 'img_obj': image})
         else:
             form = ImageForm()
         return render(request, 'main/add_image.html', {'form': form})

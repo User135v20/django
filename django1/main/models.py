@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 # Create your models here.
 
 class Patient(models.Model):
@@ -15,11 +16,14 @@ class Patient(models.Model):
     def __str__(self):
         return self.surname
 
+
 class Image(models.Model):
     """"Изображение"""
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     image = models.ImageField("Изображение", upload_to="image/")
 
     created_at = models.DateTimeField(default=timezone.now)
+
 
 class Result(models.Model):
     """"Описание снимка"""
@@ -33,6 +37,8 @@ class Result(models.Model):
     points = models.BooleanField("Наличие точек", default=False)
 
     created_at = models.DateTimeField(default=timezone.now)
+
+
 class Diagnosis(models.Model):
     """"Предварительный диагноз"""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
