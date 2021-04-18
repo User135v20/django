@@ -15,27 +15,52 @@
 <aside>
     <h3>навигация</h3>
     <ul>
-        <a href="{% url 'home' %}"><li>Главная</li></a>
-        <a href="{% url 'about' %}"><li>О нас</li></a>
+        <a href="{% url 'home' %}">
+            <li>Главная</li>
+        </a>
+        <a href="{% url 'about' %}">
+            <li>О нас</li>
+        </a>
 
     </ul>
     <hr>
     <ul>
-        <a href="{% url 'patients' %}"><li>Пользователи</li></a>
-        <a href="{% url 'add_image' %}"><li>Добавить снимок</li></a>
-        <a href="{% url 'all_results' %}"><li>Снимки</li></a>
+        <a href="{% url 'patients' %}">
+            <li>Пользователи</li>
+        </a>
+        <a href="{% url 'new_patient' %}">
+            <li>Добавить пользователя</li>
+        </a>
+        <a href="{% url 'update_patient' %}">
+            <li>Изменить данные пользователя</li>
+        </a>
+
     </ul>
     <hr>
     <ul>
-        <a href="{% url 'new_patient' %}"><li>Добавить пользователя</li></a>
-        <a href="{% url 'update_patient' %}"><li>Изменить данные пользователя</li></a>
-        <a href="{% url 'create_result' %}"><li>Добавить описание снимка</li></a>
-        <a href="{% url 'update_result' %}"><li>Изменить описание снимка</li></a>
+        <a href="{% url 'all_images' %}">
+            <li>Снимки</li>
+        </a>
+        <a href="{% url 'add_image' %}">
+            <li>Добавить снимок</li>
+        </a>
+    </ul>
+    <hr>
+    <ul>
+        <a href="{% url 'create_result' %}">
+            <li>Добавить описание снимка</li>
+        </a>
+        <a href="{% url 'update_result' %}">
+            <li>Изменить описание снимка</li>
+        </a>
+        <a href="{% url 'all_results' %}">
+            <li>Все описания</li>
+        </a>
     </ul>
 </aside>
-    <main style="color:#ffffff">
+<main style="color:#ffffff">
     {% block content%}
     {% endblock %}
-    </main>
+</main>
 </body>
 </html>

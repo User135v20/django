@@ -64,6 +64,9 @@
     {% csrf_token %}
     <input type="submit" value="delete">
 </form>
+
+<p>Снимок </p>
+<img src="{{ result.image.image.url}}" width="300">
 {% else %}
     <p>Результат не найден.</p>
 {% endif %}

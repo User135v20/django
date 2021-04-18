@@ -5,10 +5,10 @@
 <form action="update_result" method="POST">
     {% csrf_token %}
     <p><label for="patient_id">Id Пользователя: </label>
-    <input id="patient_id" type="text" name="patient_id"></p>
+    <input id="patient_id" type="text" name="patient_id" value="{{patient_id}}"></p>
 
     <p><label for="image_id">Id изображения: </label>
-    <input id="image_id" type="text" name="image_id"></p>
+    <input id="image_id" type="text" name="image_id" value="{{image_id}}"></p>
 
     <p><label for="structure_asymmetry">Асиметрия строения\пигментации : </label>
     <input id="structure_asymmetry" type="checkbox" name="structure_asymmetry"></p>

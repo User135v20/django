@@ -18,8 +18,14 @@ class ResultView:
     @staticmethod
     def list(request):
         query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
-        results = Result.objects.filter(
-            patient__surname__contains=query_parameter) if query_parameter else Result.objects.all()
+        image_id = dict(request.GET).get('image_id')[0] if dict(request.GET).get('image_id') else None
+        query = Result.objects
+        if query_parameter:
+            query = query.filter(patient__surname__contains=query_parameter)
+        if image_id:
+            query = query.filter(image__id__contains=int(image_id))
+        results = query.all()
+        print(len(results))
         return render(request, 'main/results.html', {'all_results_list': results})
 
     @staticmethod
@@ -79,7 +85,7 @@ class ResultView:
 
     @staticmethod
     @csrf_protect
-    def update(request):
+    def update(request, data=None):
         if request.method == "POST":
             input_result_data = UpdateResultForm(request.POST)
             if input_result_data.is_valid() is False:
@@ -118,6 +124,8 @@ class ResultView:
             for k, v in normal_range_.items():
                 setattr(result, k + '_norma', v)
             return render(request, 'main/result.html', {'result': result})
+        if data:
+            return render(request, 'main/update_result.html', data)
         return render(request, 'main/update_result.html')
 
 
@@ -143,7 +151,7 @@ class PatientView:
                 return render(request, 'main/update_patient.html',
                               {'error_message': "Ошибка: Все поля должны быть заполнены."})
             pk = int(input_patient_data.cleaned_data['patient_id'])
-            patient = Patient.objects.get(id=pk)
+            patient = Patient.objects.filter(id=pk).first()
             if not patient:
                 return render(request, 'main/update_patient.html',
                               {'error_message': "Ошибка: такого пользователя не существует."})
@@ -191,6 +199,20 @@ class ImageView:
         else:
             form = ImageForm()
         return render(request, 'main/add_image.html', {'form': form})
+
+    @staticmethod
+    def list(request):
+        query_parameter = int(dict(request.GET).get('surname')[0]) if dict(request.GET).get('surname') else None
+        results = Image.objects.filter(
+            patient__surname__contains=query_parameter) if query_parameter else Image.objects.all()
+        return render(request, 'main/all_images.html', {'all_results_list': results})
+
+    @staticmethod
+    def delete(request, pk=None):
+        result = Image.objects.get(id=pk)
+        result.delete()
+        results = Image.objects.all()
+        return render(request, 'main/all_images.html', {'all_results_list': results})
 
 
 

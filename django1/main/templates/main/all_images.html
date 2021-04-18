@@ -1,0 +1,52 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+{% block content %}
+<h3>Главная страница</h3>
+<p> примеры изображений с отличительными признаками </p>
+<style type="text/css">
+table {
+    max-width: 80%;
+    height: auto;
+    width: auto\9; /* ie8 */
+    float: right;
+}
+
+
+</style>
+<h4> Снимки </h4>
+
+<!--<form action="image" method="GET">-->
+<!--    {% csrf_token %}-->
+<!--    <p><label for="surname">Фильтр по фамилии: </label>-->
+<!--        <input id="surname" type="text" name="surname"><input type="submit" value="filter"></p>-->
+<!--</form>-->
+<table>
+    {% for image in all_results_list %}
+    <tr class='success'>
+
+        <p>Пациент {{ image.patient.id }} ({{ image.patient.surname }} {{ image.patient.name }} {{ image.patient.patronymic }})</p>
+        <p>Снимок {{ image.id }}</p>
+        <img src="{{ image.image.url}}" width="300">
+    </tr>
+    <tr>
+    </tr>
+    <p>действия:</p>
+    <tr class='success'>
+        <form action="{% url 'all_results' %}" method="GET">
+            <input type="hidden" name="image_id" value="{{ image.id }}" />
+            <input type="submit" value="посмотреть описания">
+        </form>
+    </tr>
+    <p></p>
+    <tr class='success'>
+        <form action="{% url 'delete_image' pk=image.id %}" method="DELETE">
+            {% csrf_token %}
+            <input type="submit" value="удалить">
+        </form>
+    </tr>
+    <p></p>
+    {% endfor %}
+</table>
+
+{% endblock %}
