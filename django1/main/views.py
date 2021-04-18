@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
-from .forms import PatientForm, UpdatePatientForm, ResultForm, UpdateResultForm
+from .forms import PatientForm, UpdatePatientForm, ResultForm, UpdateResultForm, ImageForm
 from .models import Result, Patient,Image
 from .settings import NORMAL_MEASURE
 
@@ -167,6 +167,23 @@ class PatientView:
             new_patient.save()
             return render(request, 'main/patient.html', {'patient': new_patient, 'is_new': True})
         return render(request, 'main/new_patient.html')
+
+class ImageView:
+    @staticmethod
+    @csrf_protect
+    def add(request):
+        """Process images uploaded by users"""
+        if request.method == 'POST':
+            form = ImageForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                # Get the current instance object to display in the template
+                img_obj = form.instance
+                return render(request, 'main/add_image.html', {'form': form, 'img_obj': img_obj})
+        else:
+            form = ImageForm()
+        return render(request, 'main/add_image.html', {'form': form})
+
 
 
 def normal_str_range():

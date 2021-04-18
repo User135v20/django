@@ -19,6 +19,8 @@ urlpatterns = [
     path('delete_patient/(?P<pk>[0-9]+)/$', views.PatientView.delete, name='delete_patient'),
     path('update_patient', views.PatientView.update, name='update_patient'),
 
+    path('add_image', views.ImageView.add, name='add_image'),
+
 ]
 
 
