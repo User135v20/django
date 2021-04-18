@@ -13,27 +13,27 @@
             <td>{{ patient.id }}</td>
         </tr>
         <tr>
-            <td>surname </td>
+            <td>Фамилия: </td>
             <td>{{ patient.surname }}</td>
         </tr>
         <tr>
-            <td>name </td>
+            <td>Имя: </td>
             <td>{{ patient.name }}</td>
         </tr>
         <tr>
-            <td>patronymic </td>
+            <td>Отчество: </td>
             <td>{{ patient.patronymic }}</td>
         </tr>
         <tr>
-            <td>position at work </td>
+            <td>Должность: </td>
             <td>{{ patient.position_at_work }}</td>
         </tr>
         <tr>
-            <td>created </td>
+            <td>Время создания: </td>
             <td>{{ patient.created_at }}</td>
         </tr>
     </table>
 {% else %}
-    <p>Patient not exists.</p>
+    <p>Пациент не найден.</p>
 {% endif %}
 {% endblock %}
