@@ -5,8 +5,30 @@
 <h3>Главная страница</h3>
 <p> примеры изображений с отличительными признаками </p>
 
+<td>  Асимметрия пигментации и строения</td>
 <div>
 <!--    <img src="\1.jpg" class="img-fluid" width="189" height="255" alt="lorem">-->
-    <img src="{% static 'main/image/1.jpg' %}" width="30" height="30"/>
+    <img src="{% static 'main/image/1.jpg' %}" width=30% height=auto/>
+    <img src={{ MEDIA_URL }}{{ Image.image.url }} alt="Картинка"/>
+</div>
+
+<td>  Наличие бело-голубы структур</td>
+<div>
+    <img src="{% static 'main/image/2.jpg' %}" width=30% height=auto/>
+</div>
+
+<td>  Атипичная пигментная сеть </td>
+<div>
+    <img src="{% static 'main/image/3.jpg' %}" width=30% height=auto/>
+</div>
+
+<td>  Радиальная лучистость</td>
+<div>
+    <img src="{% static 'main/image/4.jpg' %}" width=30% height=auto/>
+</div>
+
+<td>  Точки</td>
+<div>
+    <img src="{% static 'main/image/5.jpg' %}" width=30% height=auto/>
 </div>
 {% endblock %}

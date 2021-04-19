@@ -1,7 +1,11 @@
 from django.urls import path
+from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 from . import views
 urlpatterns = [
     path('', views.index, name='home'),
+    path('admin/', admin.site.urls),
     path('about', views.about, name='about'),
 
     path('create_result', views.ResultView.create, name='create_result'),
@@ -15,4 +19,4 @@ urlpatterns = [
     path('delete_patient/(?P<pk>[0-9]+)/$', views.PatientView.delete, name='delete_patient'),
     path('update_patient', views.PatientView.update, name='update_patient'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

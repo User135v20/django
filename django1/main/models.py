@@ -17,7 +17,7 @@ class Patient(models.Model):
 
 class Image(models.Model):
     """"Изображение"""
-    image = models.ImageField("Изображение", upload_to="image/")
+    image = models.ImageField(upload_to="image/", blank=True, null=True)
 
     created_at = models.DateTimeField(default=timezone.now)
 

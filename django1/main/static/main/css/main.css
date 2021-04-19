@@ -6,7 +6,7 @@ float: left;
 background: #181818;
 width: 20%;
 padding: 2.5%;
-height: 100vh ;
+height: 450vh ;
 color: #fff;
 border-right: 5px solid #4d4d4d;
 }
@@ -26,9 +26,3 @@ color: #fff;
 text-decoration: none;
 transform: scale(1.05);
  }
-
-
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}

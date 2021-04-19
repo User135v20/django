@@ -22,7 +22,8 @@
             <td>{{ result.id }}</td>
             <td>{{result.patient.surname}} {{result.patient.name}} {{result.patient.patronymic}}{{result.patient.position_at_work }} </td>
             <td>{{ result.created_at }}</td>
-            <td><a href="{% url 'result' pk=result.id %}"><li>подробнее</li></a></td>
+            <td>|</td>
+            <td><a href="{% url 'result' pk=result.id %}"><li>info</li></a></td>
             <td>
                 <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
                     {% csrf_token %}

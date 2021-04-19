@@ -1,7 +1,6 @@
 from django import forms
 
 from .models import Patient
-from .models import Image
 
 
 class PatientForm(forms.ModelForm):
