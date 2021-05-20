@@ -206,9 +206,8 @@ class ImageView:
 
     @staticmethod
     def list(request):
-        query_parameter = int(dict(request.GET).get('surname')[0]) if dict(request.GET).get('surname') else None
-        results = Image.objects.filter(
-            patient__surname__contains=query_parameter) if query_parameter else Image.objects.all()
+        query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+        results = Image.objects.filter(patient__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
         return render(request, 'main/all_images.html', {'all_results_list': results})
 
     @staticmethod
