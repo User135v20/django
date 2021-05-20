@@ -96,7 +96,7 @@
 </form>
 
 <p>Снимок </p>
-<img src="{{ result.image.image.url}}" width="300">
+<img src="{{ result.image.image.url}}" width="300" onclick="this.style.width='100%'" onmouseout="this.style.width='300px'">
 {% else %}
     <p>Результат не найден.</p>
 {% endif %}
