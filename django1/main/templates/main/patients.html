@@ -25,7 +25,7 @@
             <td>{{ patient.surname }}</td>
             <td>{{ patient.name }}</td>
             <td>{{ patient.patronymic }}</td>
-            <td>{{ patient.position_at_work }} </td>>
+            <td>{{ patient.position_at_work }} </td>
             <td>{{ patient.created_at }}</td>
             <td>
                 <form action="{% url 'delete_patient' pk=patient.id %}" method="DELETE">
