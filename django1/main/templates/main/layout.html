@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'main/css/main.css'%}">
 </head>
 <body>
-<aside>
+<div class="sidenav">
     <h3>навигация</h3>
     <ul>
         <a href="{% url 'home' %}">
@@ -57,10 +57,10 @@
             <li>Все описания</li>
         </a>
     </ul>
-</aside>
-<main style="color:#ffffff">
+</div>
+<div class="main" style="color:#ffffff">
     {% block content%}
     {% endblock %}
-</main>
+</div>
 </body>
 </html>
