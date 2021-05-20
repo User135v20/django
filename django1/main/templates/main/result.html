@@ -51,11 +51,41 @@
     </tr>
 
     <tr>
-        <td>{{ result.structure_asymmetry }}</td>
-        <td>{{ result.blue_white_structures }}</td>
-        <td>{{ result.atypical_pigment_network }}</td>
-        <td>{{ result.radial_radiance }}</td>
-        <td>{{ result.points }}</td>
+        <td>
+           {% if result.structure_asymmetry == True %}
+            <center>&#9745;</center>
+            {% else %}
+            <center>&#9746;</center>
+            {% endif %}
+        </td>
+        <td>
+           {% if result.blue_white_structures == True %}
+            <center>&#9745;</center>
+            {% else %}
+            <center>&#9746;</center>
+            {% endif %}
+        </td>
+        <td>
+           {% if result.atypical_pigment_network == True %}
+            <center>&#9745;</center>
+            {% else %}
+            <center>&#9746;</center>
+            {% endif %}
+        </td>
+        <td>
+           {% if result.radial_radiance == True %}
+            <center>&#9745;</center>
+            {% else %}
+            <center>&#9746;</center>
+            {% endif %}
+        </td>
+        <td>
+           {% if result.points == True %}
+            <center>&#9745;</center>
+            {% else %}
+            <center>&#9746;</center>
+            {% endif %}
+        </td>
     </tr>
 
 </table>
