@@ -132,7 +132,11 @@ class ResultView:
 class PatientView:
     @staticmethod
     def list(request):
-        results = Patient.objects.all()
+        query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+        if query_parameter:
+            results = Patient.objects.filter(surname__contains=query_parameter).all()
+        else:
+            results = Patient.objects.all()
         return render(request, 'main/patients.html', {'patients': results})
 
     @staticmethod
