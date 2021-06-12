@@ -1,15 +1,15 @@
 {% extends 'main/layout.html' %}
 
 {% block content %}
-<h4> Информация о пациентах </h4>
-<form action="patients" method="GET">
+<h4> Информация о пользователях </h4>
+<form action="users" method="GET">
     {% csrf_token %}
     <p>
         <label for="surname">Фильтр по фамилии: </label>
         <input id="surname" type="text" name="surname"><input type="submit" value="filter">
     </p>
 </form>
-{% if patients %}
+{% if users %}
     <table>
         <tr>
             <td> ID    </td>
@@ -19,16 +19,16 @@
             <td> Должность  </td>
             <td> Дата регистрации  </td>
         </tr>
-        {% for patient in patients %}
+        {% for user in users %}
         <tr>
-            <td>{{ patient.id }}</td>
-            <td>{{ patient.surname }}</td>
-            <td>{{ patient.name }}</td>
-            <td>{{ patient.patronymic }}</td>
-            <td>{{ patient.position_at_work }} </td>
-            <td>{{ patient.created_at }}</td>
+            <td>{{ user.id }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.patronymic }}</td>
+            <td>{{ user.position_at_work }} </td>
+            <td>{{ user.created_at }}</td>
             <td>
-                <form action="{% url 'delete_patient' pk=patient.id %}" method="DELETE">
+                <form action="{% url 'delete_user' pk=user.id %}" method="DELETE">
                     {% csrf_token %}
                     <input type="submit" value="delete">
                 </form>
@@ -37,6 +37,6 @@
         {% endfor %}
     </table>
 {% else %}
-    <p>Пациенты не найдены((</p>
+    <p>Пользовательы не найдены((</p>
 {% endif %}
 {% endblock %}

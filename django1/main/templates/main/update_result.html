@@ -4,11 +4,11 @@
 <h4> Исправление результата </h4>
 <form action="update_result" method="POST">
     {% csrf_token %}
-    <p><label for="patient_id">Id Пользователя: </label>
-    <input id="patient_id" type="text" name="patient_id" value="{{patient_id}}"></p>
+    <p><label for="user_id">Id Пользователя: </label>
+    <input id="user_id" type="text" name="user_id" value="{{user_id}}"></p>
 
-    <p><label for="image_id">Id изображения: </label>
-    <input id="image_id" type="text" name="image_id" value="{{image_id}}"></p>
+    <p><label for="result_id">Id результата: </label>
+    <input id="result_id" type="text" name="result_id" value="{{result_id}}"></p>
 
     <p><label for="structure_asymmetry">Асиметрия строения\пигментации : </label>
     <input id="structure_asymmetry" type="checkbox" name="structure_asymmetry"></p>
@@ -24,6 +24,9 @@
 
     <p><label for="points">Наличие точек : </label>
     <input id="points" type="checkbox" name="points"></p>
+
+    <p><label for="diagnosis">Диагноз : </label>
+    <input id="diagnosis" type="text" name="diagnosis"></p>
 
     <p><input type="submit" value="OK"></p>
 </form>

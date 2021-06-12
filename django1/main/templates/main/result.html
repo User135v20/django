@@ -2,101 +2,104 @@
 
 {% block content %}
 {% if result %}
-<h4> Результат </h4>
-<h6>Пациент {{result.patient.surname}} {{result.patient.name}} {{result.patient.patronymic}} </h6>
-<p>id {{result.id}}</p>
-<p>создано {{result.created_at}}</p>
-<!--<table>-->
-<!--    <tr>-->
-<!--        <td>неименование</td>-->
-<!--        <td>результат</td>-->
-<!--        <td>отклонение</td>-->
-<!--        <td>норма</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>Количество бластных клеток</td>-->
-<!--        <td>{{ result.blast_cell }}</td>-->
-<!--        <td>{{result.blast_cell_deviation}}</td>-->
-<!--        <td>{{result.blast_cell_norma}}</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>Количество милеоцитов</td>-->
-<!--        <td>{{ result.promyelocytes }}</td>-->
-<!--        <td>{{result.promyelocytes_deviation}}</td>-->
-<!--        <td>{{result.promyelocytes_norma}}</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>Количество нейтрофилов</td>-->
-<!--        <td>{{ result.neutrophils_myelocytes }}</td>-->
-<!--        <td>{{result.neutrophils_myelocytes_deviation}}</td>-->
-<!--        <td>{{result.neutrophils_myelocytes_norma}}</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>Нейтрофилы: Миелоциты</td>-->
-<!--        <td>{{ result.neutrphils_metamyelocytes }}</td>-->
-<!--        <td>{{result.neutrphils_metamyelocytes_deviation}}</td>-->
-<!--        <td>{{result.neutrphils_metamyelocytes_norma}}</td>-->
-<!--    </tr>-->
+    <h4> Результат </h4>
+    <h6>Пользователь {{result.user.surname}} {{result.user.name}} {{result.user.patronymic}} </h6>
+    <p>id {{result.id}}</p>
+    <p>создано {{result.created_at}}</p>
+    <!--<table>-->
+    <!--    <tr>-->
+    <!--        <td>неименование</td>-->
+    <!--        <td>результат</td>-->
+    <!--        <td>отклонение</td>-->
+    <!--        <td>норма</td>-->
+    <!--    </tr>-->
+    <!--    <tr>-->
+    <!--        <td>Количество бластных клеток</td>-->
+    <!--        <td>{{ result.blast_cell }}</td>-->
+    <!--        <td>{{result.blast_cell_deviation}}</td>-->
+    <!--        <td>{{result.blast_cell_norma}}</td>-->
+    <!--    </tr>-->
+    <!--    <tr>-->
+    <!--        <td>Количество милеоцитов</td>-->
+    <!--        <td>{{ result.promyelocytes }}</td>-->
+    <!--        <td>{{result.promyelocytes_deviation}}</td>-->
+    <!--        <td>{{result.promyelocytes_norma}}</td>-->
+    <!--    </tr>-->
+    <!--    <tr>-->
+    <!--        <td>Количество нейтрофилов</td>-->
+    <!--        <td>{{ result.neutrophils_myelocytes }}</td>-->
+    <!--        <td>{{result.neutrophils_myelocytes_deviation}}</td>-->
+    <!--        <td>{{result.neutrophils_myelocytes_norma}}</td>-->
+    <!--    </tr>-->
+    <!--    <tr>-->
+    <!--        <td>Нейтрофилы: Миелоциты</td>-->
+    <!--        <td>{{ result.neutrphils_metamyelocytes }}</td>-->
+    <!--        <td>{{result.neutrphils_metamyelocytes_deviation}}</td>-->
+    <!--        <td>{{result.neutrphils_metamyelocytes_norma}}</td>-->
+    <!--    </tr>-->
 
 
-<!--</table>-->
-<table>
-    <tr>
-        <td>Ассиметрия пигментации\строения | </td>
-        <td>Наличие бело-голубых структур | </td>
-        <td>Атипичная пигментная сеть | </td>
-        <td>Радиальная лучистость | </td>
-        <td>Наличие точек  </td>
+    <!--</table>-->
+    <table>
+        <tr>
+            <td>Ассиметрия пигментации\строения | </td>
+            <td>Наличие бело-голубых структур | </td>
+            <td>Атипичная пигментная сеть | </td>
+            <td>Радиальная лучистость | </td>
+            <td>Наличие точек  | </td>
+            <td>Диагноз  </td>
+        </tr>
 
-    </tr>
+        <tr>
+            <td>
+               {% if result.structure_asymmetry == True %}
+                <center>&#9745;</center>
+                {% else %}
+                <center>&#9746;</center>
+                {% endif %}
+            </td>
+            <td>
+               {% if result.blue_white_structures == True %}
+                <center>&#9745;</center>
+                {% else %}
+                <center>&#9746;</center>
+                {% endif %}
+            </td>
+            <td>
+               {% if result.atypical_pigment_network == True %}
+                <center>&#9745;</center>
+                {% else %}
+                <center>&#9746;</center>
+                {% endif %}
+            </td>
+            <td>
+               {% if result.radial_radiance == True %}
+                <center>&#9745;</center>
+                {% else %}
+                <center>&#9746;</center>
+                {% endif %}
+            </td>
+            <td>
+               {% if result.points == True %}
+                <center>&#9745;</center>
+                {% else %}
+                <center>&#9746;</center>
+                {% endif %}
+            </td>
+            <td>
+               <p>{% if result.diagnosis %} {{ result.diagnosis }}{% else %}Отсуствует{% endif %}</p>
+            </td>
+        </tr>
 
-    <tr>
-        <td>
-           {% if result.structure_asymmetry == True %}
-            <center>&#9745;</center>
-            {% else %}
-            <center>&#9746;</center>
-            {% endif %}
-        </td>
-        <td>
-           {% if result.blue_white_structures == True %}
-            <center>&#9745;</center>
-            {% else %}
-            <center>&#9746;</center>
-            {% endif %}
-        </td>
-        <td>
-           {% if result.atypical_pigment_network == True %}
-            <center>&#9745;</center>
-            {% else %}
-            <center>&#9746;</center>
-            {% endif %}
-        </td>
-        <td>
-           {% if result.radial_radiance == True %}
-            <center>&#9745;</center>
-            {% else %}
-            <center>&#9746;</center>
-            {% endif %}
-        </td>
-        <td>
-           {% if result.points == True %}
-            <center>&#9745;</center>
-            {% else %}
-            <center>&#9746;</center>
-            {% endif %}
-        </td>
-    </tr>
+    </table>
 
-</table>
+    <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
+        {% csrf_token %}
+        <input type="submit" value="delete">
+    </form>
 
-<form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
-    {% csrf_token %}
-    <input type="submit" value="delete">
-</form>
-
-<p>Снимок </p>
-<img src="{{ result.image.image.url}}" width="300" onclick="this.style.width='100%'" onmouseout="this.style.width='300px'">
+    <p>Снимок </p>
+    <img src="{{ result.image.image.url}}" width="300" onclick="this.style.width='100%'" onmouseout="this.style.width='300px'">
 {% else %}
     <p>Результат не найден.</p>
 {% endif %}

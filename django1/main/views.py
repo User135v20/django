@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
-from .forms import PatientForm, UpdatePatientForm, ResultForm, UpdateResultForm, ImageForm
-from .models import Result, Patient,Image
+from .forms import UserForm, UpdateUserForm, ResultForm, UpdateResultForm, ImageForm
+from .models import Result, User,Image
 from .settings import NORMAL_MEASURE
 
 
@@ -21,7 +21,7 @@ class ResultView:
         image_id = dict(request.GET).get('image_id')[0] if dict(request.GET).get('image_id') else None
         query = Result.objects
         if query_parameter:
-            query = query.filter(patient__surname__contains=query_parameter)
+            query = query.filter(user__surname__contains=query_parameter)
         if image_id:
             query = query.filter(image__id__contains=int(image_id))
         results = query.all()
@@ -33,6 +33,7 @@ class ResultView:
         result = Result.objects.get(id=pk)
         for k, v in normal_str_range().items():
             setattr(result, k + "_norma", v)
+            result.diagnosis
         return render(request, 'main/result.html', {'result': result})
 
     @staticmethod
@@ -45,8 +46,8 @@ class ResultView:
                               {'error_message': "Ошибка: Все поля должны быть заполнены."})
 
             data = input_result_data.cleaned_data
-            patients = Patient.objects.filter(id=int(data['patient_id']))
-            if not patients:
+            users = User.objects.filter(id=int(data['user_id']))
+            if not users:
                 return render(request, 'main/create_result.html',
                               {'error_message': "Ошибка: такого пользователя не существует."})
 
@@ -56,7 +57,7 @@ class ResultView:
                 return render(request, 'main/create_result.html',
                               {'error_message': "Ошибка: такого изображения не существует."})
 
-            patient = patients[0]
+            user = users[0]
             normal_range_ = normal_str_range()
             for k in normal_range_.keys():
                 deviation = 0
@@ -65,8 +66,8 @@ class ResultView:
                 if data[k] < NORMAL_MEASURE[k + "_min"]:
                     deviation = -data[k] + NORMAL_MEASURE[k + "_min"]
                 data[k + '_deviation'] = deviation
-            data['patient'] = patient
-            del data['patient_id']
+            data['user'] = user
+            del data['user_id']
             result = Result(
                 **data
             )
@@ -90,23 +91,23 @@ class ResultView:
             input_result_data = UpdateResultForm(request.POST)
             if input_result_data.is_valid() is False:
                 return render(request, 'main/update_result.html',
-                              {'error_message': "Ошибка: ошибка в водимых данных."})
-            patient_id = input_result_data.cleaned_data['patient_id']
-            if patient_id:
-                patients = Patient.objects.filter(id=patient_id)
-                if not patients:
+                              {'error_message': f"Ошибка: ошибка в водимых данных. {input_result_data.errors}"})
+            user_id = input_result_data.cleaned_data['user_id']
+            if user_id:
+                users = User.objects.filter(id=user_id)
+                if not users:
                     return render(request, 'main/update_result.html',
                                   {'error_message': "Ошибка: такого пользователя не существует."})
-            id_ = int(input_result_data.cleaned_data['id'])
+            id_ = int(input_result_data.cleaned_data['result_id'])
             results = Result.objects.filter(id=id_)
             if not results:
                 return render(request, 'main/update_result.html',
                               {'error_message': "Ошибка: такого результата не существует."})
             result = results[0]
-            data = {k: v for k, v in input_result_data.cleaned_data.items() if k != "id" and v}
-            if 'patient_id' in data and data['patient_id'] != result.patient.id:
-                data['patient'] = patients[0]
-                del data['patient_id']
+            data = {k: v for k, v in input_result_data.cleaned_data.items() if k != "result_id" and v}
+            if 'user_id' in data and data['user_id'] != result.user.id:
+                data['user'] = users[0]
+                del data['user_id']
 
             normal_range_ = normal_str_range()
             for k in normal_range_.keys():
@@ -129,56 +130,56 @@ class ResultView:
         return render(request, 'main/update_result.html')
 
 
-class PatientView:
+class UserView:
     @staticmethod
     def list(request):
         query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
         if query_parameter:
-            results = Patient.objects.filter(surname__contains=query_parameter).all()
+            results = User.objects.filter(surname__contains=query_parameter).all()
         else:
-            results = Patient.objects.all()
-        return render(request, 'main/patients.html', {'patients': results})
+            results = User.objects.all()
+        return render(request, 'main/users.html', {'users': results})
 
     @staticmethod
     def delete(request, pk=None):
-        patient = Patient.objects.get(id=pk)
-        patient.delete()
-        patients = Patient.objects.all()
-        return render(request, 'main/patients.html', {'patients': patients})
+        user = User.objects.get(id=pk)
+        user.delete()
+        users = User.objects.all()
+        return render(request, 'main/users.html', {'users': users})
 
     @staticmethod
     @csrf_protect
     def update(request):
         if request.method == "POST":
-            input_patient_data = UpdatePatientForm(request.POST)
-            if input_patient_data.is_valid() is False:
-                return render(request, 'main/update_patient.html',
+            input_user_data = UpdateUserForm(request.POST)
+            if input_user_data.is_valid() is False:
+                return render(request, 'main/update_user.html',
                               {'error_message': "Ошибка: Все поля должны быть заполнены."})
-            pk = int(input_patient_data.cleaned_data['patient_id'])
-            patient = Patient.objects.filter(id=pk).first()
-            if not patient:
-                return render(request, 'main/update_patient.html',
+            pk = int(input_user_data.cleaned_data['user_id'])
+            user = User.objects.filter(id=pk).first()
+            if not user:
+                return render(request, 'main/update_user.html',
                               {'error_message': "Ошибка: такого пользователя не существует."})
-            data = {k: v for k, v in input_patient_data.cleaned_data.items() if k != "patient_id" and v}
-            Patient.objects.filter(id=pk).update(**data)
-            patient = Patient.objects.get(id=pk)
-            return render(request, 'main/patient.html', {'patient': patient, 'is_new': False})
-        return render(request, 'main/update_patient.html')
+            data = {k: v for k, v in input_user_data.cleaned_data.items() if k != "user_id" and v}
+            User.objects.filter(id=pk).update(**data)
+            user = User.objects.get(id=pk)
+            return render(request, 'main/user.html', {'user': user, 'is_new': False})
+        return render(request, 'main/update_user.html')
 
     @staticmethod
     @csrf_protect
     def create(request):
         if request.method == "POST":
-            input_patient_data = PatientForm(request.POST)
-            if input_patient_data.is_valid() is False:
-                return render(request, 'main/new_patient.html',
+            input_user_data = UserForm(request.POST)
+            if input_user_data.is_valid() is False:
+                return render(request, 'main/new_user.html',
                               {'error_message': "Ошибка: Все поля должны быть заполнены."})
-            new_patient = Patient(
-                **input_patient_data.cleaned_data
+            new_user = User(
+                **input_user_data.cleaned_data
             )
-            new_patient.save()
-            return render(request, 'main/patient.html', {'patient': new_patient, 'is_new': True})
-        return render(request, 'main/new_patient.html')
+            new_user.save()
+            return render(request, 'main/user.html', {'user': new_user, 'is_new': True})
+        return render(request, 'main/new_user.html')
 
 
 class ImageView:
@@ -189,14 +190,14 @@ class ImageView:
         if request.method == 'POST':
             form = ImageForm(request.POST, request.FILES)
             if form.is_valid():
-                patient_id = form.cleaned_data['patient_id']
-                patient = Patient.objects.filter(id=patient_id)
-                if not patient:
+                user_id = form.cleaned_data['user_id']
+                user = User.objects.filter(id=user_id)
+                if not user:
                     return render(request, 'main/add_image.html',
                                   {'error_message': "Ошибка: такого пользователя не существует."})
-                patient = patient[0]
-                data = {k: v for k, v in form.cleaned_data.items() if k != "patient_id" and v}
-                data['patient'] = patient
+                user = user[0]
+                data = {k: v for k, v in form.cleaned_data.items() if k != "user_id" and v}
+                data['user'] = user
                 image = Image(**data)
                 image.save()
                 return render(request, 'main/add_image.html', {'form': form, 'img_obj': image})
@@ -207,7 +208,7 @@ class ImageView:
     @staticmethod
     def list(request):
         query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
-        results = Image.objects.filter(patient__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
+        results = Image.objects.filter(user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
         return render(request, 'main/all_images.html', {'all_results_list': results})
 
     @staticmethod

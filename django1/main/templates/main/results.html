@@ -4,7 +4,7 @@
 <h4> Результаты </h4>
 <form action="results" method="GET">
     {% csrf_token %}
-    <p><label for="surname">Фильтр по фамилии: </label>
+    <p><label for="surname">Фильтр по фамилии пользователя: </label>
     <input id="surname" type="text" name="surname"><input type="submit" value="filter"></p>
 </form>
 
@@ -12,7 +12,7 @@
     <table>
         <tr class='success'>
             <td>id</td>
-            <td>пациент</td>
+            <td>пользователь</td>
             <td>id картинки</td>
             <td>время создания</td>
             <td></td>
@@ -21,7 +21,7 @@
 
         <tr class='success'>
             <td>{{ result.id }}</td>
-            <td>{{result.patient.surname}} {{result.patient.name}} {{result.patient.patronymic}}{{result.patient.position_at_work }} </td>
+            <td>{{result.user.surname}} {{result.user.name}} {{result.user.patronymic}}{{result.user.position_at_work }} </td>
             <td>{{ result.image.id }}</td>
             <td>{{ result.created_at }}</td>
             <td><a href="{% url 'result' pk=result.id %}"><li>подробнее</li></a></td>

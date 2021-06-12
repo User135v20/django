@@ -26,7 +26,7 @@ table {
     {% for image in all_results_list %}
     <tr class='success'>
 
-        <p>Пациент {{ image.patient.id }} ({{ image.patient.surname }} {{ image.patient.name }} {{ image.patient.patronymic }})</p>
+        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }})</p>
         <p>Снимок {{ image.id }}</p>
         <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'" onmouseout="this.style.width='400px'">
     </tr>

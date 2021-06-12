@@ -2,38 +2,38 @@
 
 {% block content %}
 {% if is_new %}
-<h4> Добавлен пациент </h4>
+<h4> Добавлен пользователь </h4>
 {% else %}
-<h4> Обновленные данные пациента </h4>
+<h4> Обновленные данные пользователяа </h4>
 {% endif %}
-{% if patient %}
+{% if user %}
     <table>
         <tr>
             <td>id </td>
-            <td>{{ patient.id }}</td>
+            <td>{{ user.id }}</td>
         </tr>
         <tr>
             <td>Фамилия: </td>
-            <td>{{ patient.surname }}</td>
+            <td>{{ user.surname }}</td>
         </tr>
         <tr>
             <td>Имя: </td>
-            <td>{{ patient.name }}</td>
+            <td>{{ user.name }}</td>
         </tr>
         <tr>
             <td>Отчество: </td>
-            <td>{{ patient.patronymic }}</td>
+            <td>{{ user.patronymic }}</td>
         </tr>
         <tr>
             <td>Должность: </td>
-            <td>{{ patient.position_at_work }}</td>
+            <td>{{ user.position_at_work }}</td>
         </tr>
         <tr>
             <td>Время создания: </td>
-            <td>{{ patient.created_at }}</td>
+            <td>{{ user.created_at }}</td>
         </tr>
     </table>
 {% else %}
-    <p>Пациент не найден.</p>
+    <p>Пользователь не найден.</p>
 {% endif %}
 {% endblock %}
