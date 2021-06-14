@@ -6,6 +6,7 @@ from .models import Result, User,Image
 from .settings import NORMAL_MEASURE
 from django.http import HttpResponse
 from zipfile import ZipFile
+import io
 
 
 def index(request):
@@ -228,18 +229,16 @@ class ImageView:
     @csrf_protect
     def download(request):
         if request.method == 'POST':
-            #print(request.POST.get('image_id'))
             form = DownloadImageForm(request.POST)
             if form.is_valid():
-                test_file = Image.objects.get(id=int(form.cleaned_data['image_id']))
-                print(test_file.items())
+                # https://overcoder.net/q/1700285/%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BD%D1%8B%D0%B9-zip-%D1%84%D0%B0%D0%B9%D0%BB-%D0%BE%D1%82-django
+                buffer = io.BytesIO()
+                with ZipFile(buffer, 'w') as zipObj:
+                    zipObj.write("." + form.cleaned_data['image_id'][6:])
 
-                zipObj = ZipFile('images.zip', 'w')
-                zipObj.write(test_file)
-                zipObj.close()
-
-                response = HttpResponse(content=test_file)
+                response = HttpResponse(content=buffer.getvalue())
                 response['Content-Type'] = 'application/zip'
+                response['Content-Disposition'] = 'attachment; filename=images.zip'
                 return response
             else:
                 query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None

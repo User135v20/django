@@ -47,5 +47,5 @@ class UpdateResultForm(forms.Form):
 
 
 class DownloadImageForm(forms.Form):
-    image_id = forms.IntegerField()
+    image_id = forms.CharField()
 

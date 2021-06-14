@@ -14,12 +14,25 @@ table {
 
 
 </style>
+{% if error_message %}
+    <p style="background-color:tomato;">{{ error_message }}</p>
+{% endif %}
+
 <h4> Снимки </h4>
 
 <form action="{% url 'all_images' %}"  method="GET">
     {% csrf_token %}
-    <p><label for="surname">Фильтр по фамилии: </label>
-        <input id="surname" type="text" name="surname"><input type="submit" value="filter"></p>
+    <p>Фильтры:</p>
+    <p>
+        <label for="surname">Фамилия пользователя: </label>
+        <input id="surname" type="text" name="surname">
+    </p>
+    <p>
+        <label for="surname">Фильтр по фамилии: </label>
+        <input type="radio" name="drink" value="1">&#9745;
+        <input type="radio" name="drink" value="-1">&#9746;
+    </p>
+    <input type="submit" value="filter">
 </form>
 {% if all_results_list %}
 <table>
@@ -29,6 +42,11 @@ table {
         <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }})</p>
         <p>Снимок {{ image.id }}</p>
         <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'" onmouseout="this.style.width='400px'">
+        <form action="{% url 'download' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="image_id" value="{{ image.url }}" />
+          <button type="submit">Скачать</button>
+        </form>
     </tr>
     <tr>
     </tr>
