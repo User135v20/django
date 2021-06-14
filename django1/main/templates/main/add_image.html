@@ -5,13 +5,21 @@
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-   {{ form.as_p }}
-  <button type="submit">Upload</button>
+    <p>ID пользователя: <input type="text" name="user_id"></p>
+    <input type="file" name="images"  accept=".jpg, .jpeg, .png" required multiple>
+  <button type="submit">Загрузить</button>
 </form>
 
-{% if img_obj %}
+
+{% if images %}
   <h3>Удачно загружено : {{img_obj.user_id}}</h3>
-  <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
+<table>
+  {% for image in images %}
+  <tr class='success'>
+    <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'" onmouseout="this.style.width='400px'">
+  </tr>
+  {% endfor %}
+  </table>
 {% endif %}
 
 {% if error_message %}

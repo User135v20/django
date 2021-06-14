@@ -33,7 +33,6 @@ class ResultView:
         result = Result.objects.get(id=pk)
         for k, v in normal_str_range().items():
             setattr(result, k + "_norma", v)
-            result.diagnosis
         return render(request, 'main/result.html', {'result': result})
 
     @staticmethod
@@ -188,22 +187,27 @@ class ImageView:
     def add(request):
         """Process images uploaded by users"""
         if request.method == 'POST':
-            form = ImageForm(request.POST, request.FILES)
-            if form.is_valid():
-                user_id = form.cleaned_data['user_id']
+            # form = ImageForm(request.POST)
+            # TODO: на настоящий момент не нашел сериалайзер для листа картинок. как будет время - надо вставить
+            if request.POST.get('user_id') and request.FILES:
+                user_id = request.POST.get('user_id')
                 user = User.objects.filter(id=user_id)
                 if not user:
                     return render(request, 'main/add_image.html',
                                   {'error_message': "Ошибка: такого пользователя не существует."})
                 user = user[0]
-                data = {k: v for k, v in form.cleaned_data.items() if k != "user_id" and v}
-                data['user'] = user
-                image = Image(**data)
-                image.save()
-                return render(request, 'main/add_image.html', {'form': form, 'img_obj': image})
+                images = []
+                for file in request.FILES.getlist('images'):
+                    data = {'image': file, 'user': user}
+                    image = Image(**data)
+                    image.save()
+                    images.append(image)
+                return render(request, 'main/add_image.html', {'images': images})
+            # else:
+            #     return render(request, 'main/add_image.html', {'form': form, 'error_message': form.errors})
         else:
             form = ImageForm()
-        return render(request, 'main/add_image.html', {'form': form})
+        return render(request, 'main/add_image.html')
 
     @staticmethod
     def list(request):
