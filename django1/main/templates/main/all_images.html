@@ -15,12 +15,12 @@ table {
 
 </style>
 {% if error_message %}
-    <p style="background-color:tomato;">{{ error_message }}</p>
+<p style="background-color:tomato;">{{ error_message }}</p>
 {% endif %}
 
 <h4> Снимки </h4>
 
-<form action="{% url 'all_images' %}"  method="GET">
+<form action="{% url 'all_images' %}" method="GET">
     {% csrf_token %}
     <p>Фильтры:</p>
     <p>
@@ -39,22 +39,28 @@ table {
     {% for image in all_results_list %}
     <tr class='success'>
 
-        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }})</p>
+        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic
+            }})</p>
         <p>Снимок {{ image.id }}</p>
-        <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'" onmouseout="this.style.width='400px'">
-        <form action="{% url 'download' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="image_id" value="{{ image.url }}" />
-          <button type="submit">Скачать</button>
-        </form>
+        <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'"
+             onmouseout="this.style.width='400px'">
+
     </tr>
     <tr>
     </tr>
     <p>действия:</p>
     <tr class='success'>
         <form action="{% url 'all_results' %}" method="GET">
-            <input type="hidden" name="image_id" value="{{ image.id }}" />
+            <input type="hidden" name="image_id" value="{{ image.id }}"/>
             <input type="submit" value="посмотреть описания">
+        </form>
+    </tr>
+    <p></p>
+    <tr class='success'>
+        <form action="{% url 'download' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="image_id" value="{{ image.url }}"/>
+            <button type="submit">Скачать</button>
         </form>
     </tr>
     <p></p>
@@ -68,7 +74,7 @@ table {
     {% endfor %}
 </table>
 {% else %}
-    <p>Снимки не найдены.</p>
+<p>Снимки не найдены.</p>
 {% endif %}
 
 {% endblock %}

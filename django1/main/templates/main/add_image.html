@@ -4,26 +4,27 @@
 {% block content %}
 
 <form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
+    {% csrf_token %}
     <p>ID пользователя: <input type="text" name="user_id"></p>
-    <input type="file" name="images"  accept=".jpg, .jpeg, .png" required multiple>
-  <button type="submit">Загрузить</button>
+    <input type="file" name="images" accept=".jpg, .jpeg, .png" required multiple>
+    <button type="submit">Загрузить</button>
 </form>
 
 
 {% if images %}
-  <h3>Удачно загружено : {{img_obj.user_id}}</h3>
+<h3>Удачно загружено : {{img_obj.user_id}}</h3>
 <table>
-  {% for image in images %}
-  <tr class='success'>
-    <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'" onmouseout="this.style.width='400px'">
-  </tr>
-  {% endfor %}
-  </table>
+    {% for image in images %}
+    <tr class='success'>
+        <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'"
+             onmouseout="this.style.width='400px'">
+    </tr>
+    {% endfor %}
+</table>
 {% endif %}
 
 {% if error_message %}
-    <p style="background-color:tomato;">{{ error_message }}</p>
+<p style="background-color:tomato;">{{ error_message }}</p>
 {% endif %}
 
 
