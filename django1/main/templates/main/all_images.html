@@ -36,7 +36,7 @@ table {
 {% if all_results_list %}
 <form action="{% url 'download_images' %}" method="POST">
     {% csrf_token %}
-    <input type="hidden" name="urls" value="{{ urls }}"/>
+    <input type="hidden" name="urls" value="{{ urls }}" />
     <button type="submit">cкачать всё</button>
 </form>
 <table>
@@ -55,7 +55,7 @@ table {
     <p>действия:</p>
     <tr class='success'>
         <form action="{% url 'all_results' %}" method="GET">
-            <input type="hidden" name="image_id" value="{{ image.id }}"/>
+            <input type="hidden" name="image_id" value="{{ image.id }}" />
             <input type="submit" value="посмотреть описания">
         </form>
     </tr>
@@ -63,7 +63,7 @@ table {
     <tr class='success'>
         <form action="{% url 'download' %}" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="image_id" value="{{ image.url }}"/>
+            <input type="hidden" name="image_id" value="{{ image.image.url }}" />
             <button type="submit">cкачать</button>
         </form>
     </tr>

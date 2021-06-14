@@ -1,5 +1,7 @@
+import base64
 import io
 import json
+from urllib.parse import unquote
 from zipfile import ZipFile
 
 from django.http import HttpResponse
@@ -204,6 +206,7 @@ class ImageView:
                 user = user[0]
                 images = []
                 for file in request.FILES.getlist('images'):
+                    print(type(file))
                     data = {'image': file, 'user': user}
                     image = Image(**data)
                     image.save()
@@ -216,11 +219,20 @@ class ImageView:
         return render(request, 'main/add_image.html')
 
     @staticmethod
+    def render_images(request, results, error_message=None):
+        data = {
+            'all_results_list': results,
+            'urls': json.dumps([str_to_base64(image.image.url) for image in results])
+        }
+        if error_message:
+            data['error_message'] = error_message
+        return render(request, 'main/all_images.html', data)
+
+    @staticmethod
     def list(request):
         query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
         results = Image.objects.filter(user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
-        print({'urls': json.dumps([image.image.url for image in results])})
-        return render(request, 'main/all_images.html', {'all_results_list': results, 'urls': json.dumps([image.image.url for image in results])})
+        return ImageView.render_images(request, results)
 
     @staticmethod
     def delete(request, pk=None):
@@ -237,8 +249,9 @@ class ImageView:
             if form.is_valid():
                 # https://overcoder.net/q/1700285/%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BD%D1%8B%D0%B9-zip-%D1%84%D0%B0%D0%B9%D0%BB-%D0%BE%D1%82-django
                 buffer = io.BytesIO()
+                url = form.cleaned_data['image_id']
                 with ZipFile(buffer, 'w') as zipObj:
-                    zipObj.write("." + form.cleaned_data['image_id'][6:])
+                    zipObj.write("." + unquote(url)[6:])
 
                 response = HttpResponse(content=buffer.getvalue())
                 response['Content-Type'] = 'application/zip'
@@ -248,24 +261,25 @@ class ImageView:
                 query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
                 results = Image.objects.filter(
                     user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
-                return render(request, 'main/all_images.html', {'all_results_list': results, 'error_message': form.errors})
+                return ImageView.render_images(request, results, form.errors)
         else:
             query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
             results = Image.objects.filter(
                 user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
-            return render(request, 'main/all_images.html', {'all_results_list': results})
+            return ImageView.render_images(request, results)
 
     @staticmethod
     @csrf_protect
     def download_images(request):
         form = DownloadImagesForm(request.POST)
         if form.is_valid():
-            urls = json.loads(form.cleaned_data['urls'])
+            print(form.cleaned_data['urls'])
+            urls = [base64_to_str(u) for u in json.loads(form.cleaned_data['urls'])]
             # https://overcoder.net/q/1700285/%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BD%D1%8B%D0%B9-zip-%D1%84%D0%B0%D0%B9%D0%BB-%D0%BE%D1%82-django
             buffer = io.BytesIO()
             with ZipFile(buffer, 'w') as zipObj:
                 for url in urls:
-                    zipObj.write("." + url[6:])
+                    zipObj.write("." + unquote(url)[6:])
 
             response = HttpResponse(content=buffer.getvalue())
             response['Content-Type'] = 'application/zip'
@@ -276,11 +290,22 @@ class ImageView:
             query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
             results = Image.objects.filter(
                 user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
-            return render(request, 'main/all_images.html',
-                          {'all_results_list': results, 'urls': json.dumps([image.image.url for image in results]),
-                           'error_message': form.errors})
+            return ImageView.render_images(request, results)
 
 
 def normal_str_range():
     names = {k[: -4] for k in NORMAL_MEASURE}
     return {k: str(NORMAL_MEASURE[k + '_min']) + " - " + str(NORMAL_MEASURE[k + '_max']) for k in names}
+
+
+def str_to_base64(message):
+    # some images has russian names
+    print(message)
+    message_bytes = message.encode('utf-8')
+    base64_bytes = base64.b64encode(message_bytes)
+    s = base64_bytes.decode('utf-8')
+    return s
+
+
+def base64_to_str(message):
+    return base64.b64decode(message).decode('utf-8')
