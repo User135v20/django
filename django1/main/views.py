@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
-from .forms import UserForm, UpdateUserForm, ResultForm, UpdateResultForm, ImageForm
+from .forms import UserForm, UpdateUserForm, ResultForm, UpdateResultForm, ImageForm, DownloadImageForm
 from .models import Result, User,Image
 from .settings import NORMAL_MEASURE
+from django.http import HttpResponse
+from zipfile import ZipFile
 
 
 def index(request):
@@ -222,6 +224,33 @@ class ImageView:
         results = Image.objects.all()
         return render(request, 'main/all_images.html', {'all_results_list': results})
 
+    @staticmethod
+    @csrf_protect
+    def download(request):
+        if request.method == 'POST':
+            #print(request.POST.get('image_id'))
+            form = DownloadImageForm(request.POST)
+            if form.is_valid():
+                test_file = Image.objects.get(id=int(form.cleaned_data['image_id']))
+                print(test_file.items())
+
+                zipObj = ZipFile('images.zip', 'w')
+                zipObj.write(test_file)
+                zipObj.close()
+
+                response = HttpResponse(content=test_file)
+                response['Content-Type'] = 'application/zip'
+                return response
+            else:
+                query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+                results = Image.objects.filter(
+                    user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
+                return render(request, 'main/all_images.html', {'all_results_list': results, 'error_message': form.errors})
+        else:
+            query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+            results = Image.objects.filter(
+                user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
+            return render(request, 'main/all_images.html', {'all_results_list': results})
 
 
 def normal_str_range():

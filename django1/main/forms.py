@@ -46,3 +46,6 @@ class UpdateResultForm(forms.Form):
     diagnosis = forms.CharField(required=False)
 
 
+class DownloadImageForm(forms.Form):
+    image_id = forms.IntegerField()
+
