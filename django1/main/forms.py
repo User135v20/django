@@ -49,3 +49,7 @@ class UpdateResultForm(forms.Form):
 class DownloadImageForm(forms.Form):
     image_id = forms.CharField()
 
+
+class DownloadImagesForm(forms.Form):
+    urls = forms.CharField()
+

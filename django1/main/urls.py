@@ -23,6 +23,7 @@ urlpatterns = [
     path('all_images', views.ImageView.list, name='all_images'),
     path('delete_image/(?P<pk>[0-9]+)/$', views.ImageView.delete, name='delete_image'),
     path('download', views.ImageView.download, name='download'),
+    path('download_images', views.ImageView.download_images, name='download_images'),
 ]
 
 

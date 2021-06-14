@@ -12,7 +12,6 @@ table {
     float: right;
 }
 
-
 </style>
 {% if error_message %}
 <p style="background-color:tomato;">{{ error_message }}</p>
@@ -35,12 +34,17 @@ table {
     <input type="submit" value="filter">
 </form>
 {% if all_results_list %}
+<form action="{% url 'download_images' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="urls" value="{{ urls }}"/>
+    <button type="submit">cкачать всё</button>
+</form>
 <table>
     {% for image in all_results_list %}
     <tr class='success'>
 
-        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic
-            }})</p>
+        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }}
+            )</p>
         <p>Снимок {{ image.id }}</p>
         <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'"
              onmouseout="this.style.width='400px'">
@@ -60,7 +64,7 @@ table {
         <form action="{% url 'download' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="image_id" value="{{ image.url }}"/>
-            <button type="submit">Скачать</button>
+            <button type="submit">cкачать</button>
         </form>
     </tr>
     <p></p>

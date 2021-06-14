@@ -1,12 +1,15 @@
+import io
+import json
+from zipfile import ZipFile
+
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
-from .forms import UserForm, UpdateUserForm, ResultForm, UpdateResultForm, ImageForm, DownloadImageForm
-from .models import Result, User,Image
+from .forms import UserForm, UpdateUserForm, ResultForm, UpdateResultForm, ImageForm, DownloadImageForm, \
+    DownloadImagesForm
+from .models import Result, User, Image
 from .settings import NORMAL_MEASURE
-from django.http import HttpResponse
-from zipfile import ZipFile
-import io
 
 
 def index(request):
@@ -216,7 +219,8 @@ class ImageView:
     def list(request):
         query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
         results = Image.objects.filter(user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
-        return render(request, 'main/all_images.html', {'all_results_list': results})
+        print({'urls': json.dumps([image.image.url for image in results])})
+        return render(request, 'main/all_images.html', {'all_results_list': results, 'urls': json.dumps([image.image.url for image in results])})
 
     @staticmethod
     def delete(request, pk=None):
@@ -250,6 +254,31 @@ class ImageView:
             results = Image.objects.filter(
                 user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
             return render(request, 'main/all_images.html', {'all_results_list': results})
+
+    @staticmethod
+    @csrf_protect
+    def download_images(request):
+        form = DownloadImagesForm(request.POST)
+        if form.is_valid():
+            urls = json.loads(form.cleaned_data['urls'])
+            # https://overcoder.net/q/1700285/%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BD%D1%8B%D0%B9-zip-%D1%84%D0%B0%D0%B9%D0%BB-%D0%BE%D1%82-django
+            buffer = io.BytesIO()
+            with ZipFile(buffer, 'w') as zipObj:
+                for url in urls:
+                    zipObj.write("." + url[6:])
+
+            response = HttpResponse(content=buffer.getvalue())
+            response['Content-Type'] = 'application/zip'
+            response['Content-Disposition'] = 'attachment; filename=images.zip'
+            return response
+
+        else:
+            query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+            results = Image.objects.filter(
+                user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
+            return render(request, 'main/all_images.html',
+                          {'all_results_list': results, 'urls': json.dumps([image.image.url for image in results]),
+                           'error_message': form.errors})
 
 
 def normal_str_range():
