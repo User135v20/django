@@ -9,7 +9,11 @@
     <input id="user_id" type="text" name="user_id"></p>
 
     <p><label for="image_id">Id изображения : </label>
-    <input id="image_id" type="text" name="image_id"></p>
+    {% if image_id %}
+        <input id="image_id" type="text" name="image_id" value="{{ image_id }}"></p>
+    {% else %}
+        <input id="image_id" type="text" name="image_id"></p>
+    {% endif %}
 
     <p><label for="structure_asymmetry">Асиметрия строения\пигментации : </label>
     <input id="structure_asymmetry" type="checkbox" name="structure_asymmetry"></p>

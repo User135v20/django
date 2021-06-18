@@ -76,7 +76,14 @@ table {
     <tr class='success'>
         <form action="{% url 'all_results' %}" method="GET">
             <input type="hidden" name="image_id" value="{{ image.id }}" />
-            <input type="submit" value="посмотреть описания">
+            <input type="submit" value="посмотреть описание">
+        </form>
+    </tr>
+    <p></p>
+    <tr class='success'>
+        <form action="{% url 'create_result' %}" method="GET">
+            <input type="hidden" name="image_id" value="{{ image.id }}" />
+            <input type="submit" value="добавить описание">
         </form>
     </tr>
     <p></p>

@@ -82,7 +82,8 @@ class ResultView:
             for k, v in normal_range_.items():
                 setattr(result, k + '_norma', v)
             return render(request, 'main/result.html', {'result': result})
-        return render(request, 'main/create_result.html')
+        image_id = dict(request.GET).get('image_id')[0] if dict(request.GET).get('image_id') else None
+        return render(request, 'main/create_result.html', {"image_id": image_id})
 
     @staticmethod
     def delete(request, pk=None):
