@@ -230,8 +230,22 @@ class ImageView:
 
     @staticmethod
     def list(request):
-        query_parameter = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
-        results = Image.objects.filter(user__surname__contains=query_parameter).all() if query_parameter else Image.objects.all()
+        surname = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
+        structure_asymmetry = dict(request.GET).get('structure_asymmetry')[0] == "True" if dict(request.GET).get('structure_asymmetry') else None
+        image_ids = False
+        results_query = Result.objects
+        if structure_asymmetry is not None:
+            results_query = results_query.filter(structure_asymmetry=structure_asymmetry)
+            image_ids = True
+        if image_ids:
+            image_ids = [r.image.id for r in results_query.all()]
+        print("!!!", image_ids)
+        query = Image.objects
+        if surname:
+            query = query.filter(user__surname__contains=surname)
+        if image_ids:
+            query = query.filter(id__in=image_ids)
+        results = query.all()
         return ImageView.render_images(request, results)
 
     @staticmethod
