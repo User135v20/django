@@ -231,15 +231,16 @@ class ImageView:
     @staticmethod
     def list(request):
         surname = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
-        structure_asymmetry = dict(request.GET).get('structure_asymmetry')[0] == "True" if dict(request.GET).get('structure_asymmetry') else None
         image_ids = False
         results_query = Result.objects
-        if structure_asymmetry is not None:
-            results_query = results_query.filter(structure_asymmetry=structure_asymmetry)
-            image_ids = True
+        feature_names = ['structure_asymmetry', 'blue_white_structures', 'atypical_pigment_network', 'radial_radiance', 'points']
+        for feature_name in feature_names:
+            bool_feature = dict(request.GET).get(feature_name)[0] == "True" if dict(request.GET).get(feature_name) else None
+            if bool_feature is not None:
+                results_query = results_query.filter(**{feature_name: bool_feature})
+                image_ids = True
         if image_ids:
             image_ids = [r.image.id for r in results_query.all()]
-        print("!!!", image_ids)
         query = Image.objects
         if surname:
             query = query.filter(user__surname__contains=surname)
