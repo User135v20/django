@@ -3,9 +3,9 @@
 {% block content %}
 {% if result %}
     <h4> Результат </h4>
-    <h6>Пользователь {{result.user.surname}} {{result.user.name}} {{result.user.patronymic}} </h6>
-    <p>id {{result.id}}</p>
-    <p>создано {{result.created_at}}</p>
+    <img src="{{ result.image.image.url}}" width="300" onclick="this.style.width='100%'" onmouseout="this.style.width='300px'">
+    <p>Пользователь выставивший результат: {{result.user.surname}} {{result.user.name}} {{result.user.patronymic}} </p>
+    <p>id {{result.id}} ; создано {{result.created_at}}</p>
     <!--<table>-->
     <!--    <tr>-->
     <!--        <td>неименование</td>-->
@@ -95,11 +95,11 @@
 
     <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
         {% csrf_token %}
-        <input type="submit" value="delete">
+        <input type="submit" value="Удалить описание">
     </form>
 
-    <p>Снимок </p>
-    <img src="{{ result.image.image.url}}" width="300" onclick="this.style.width='100%'" onmouseout="this.style.width='300px'">
+
+
 {% else %}
     <p>Результат не найден.</p>
 {% endif %}

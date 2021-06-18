@@ -2,8 +2,6 @@
 
 {% load static %}
 {% block content %}
-<h3>Главная страница</h3>
-<p> примеры изображений с отличительными признаками </p>
 <style type="text/css">
 table {
     max-width: 80%;
@@ -17,14 +15,19 @@ table {
 <p style="background-color:tomato;">{{ error_message }}</p>
 {% endif %}
 
-<h4> Снимки </h4>
+<h3> Снимки </h3>
 
 <form action="{% url 'all_images' %}" method="GET">
     {% csrf_token %}
     <p>Фильтры:</p>
     <p>
-        <label for="surname">Фамилия пользователя: </label>
+        <label for="surname">Фамилия пользователя (загрузившего изображение)*: </label>
         <input id="surname" type="text" name="surname">
+    </p>
+    <p>
+        <label>Наличие описания у снимка : </label>
+        <input type="radio" name="description" value=True>есть;
+        <input type="radio" name="description" value=False>нет;
     </p>
     <p>
         <label>Асиметрия строения\пигментации : </label>
@@ -53,6 +56,7 @@ table {
     </p>
     <input type="submit" value="filter">
 </form>
+<p> количество снимков {{ image_count }} </p>
 {% if all_results_list %}
 <form action="{% url 'download_images' %}" method="POST">
     {% csrf_token %}

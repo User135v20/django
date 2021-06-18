@@ -223,7 +223,8 @@ class ImageView:
     def render_images(request, results, error_message=None):
         data = {
             'all_results_list': results,
-            'urls': json.dumps([str_to_base64(image.image.url) for image in results])
+            'urls': json.dumps([str_to_base64(image.image.url) for image in results]),
+            'image_count': len(results),
         }
         if error_message:
             data['error_message'] = error_message
@@ -240,22 +241,30 @@ class ImageView:
             if bool_feature is not None:
                 results_query = results_query.filter(**{feature_name: bool_feature})
                 image_ids = True
-        if image_ids:
+        bool_description = dict(request.GET).get('description')[0] == "True" if dict(request.GET).get('description') else None
+        if image_ids and bool_description is False:
+            results = Image.objects.all()
+            return render(request, 'main/all_images.html', {'all_results_list': results, 'image_count': len(results),
+                                                            'error_message': "Был задан фильт на признаки в описания и одновременно включены описания"})
+        if image_ids or bool_description is not None:
             image_ids = [r.image.id for r in results_query.all()]
         query = Image.objects
         if surname:
             query = query.filter(user__surname__contains=surname)
         if image_ids:
-            query = query.filter(id__in=image_ids)
+            if bool_description is False:
+                query = query.exclude(id__in=image_ids)
+            else:
+                query = query.filter(id__in=image_ids)
         results = query.all()
-        return ImageView.render_images(request, results)
+        return render(request, 'main/all_images.html', {'all_results_list': results, 'image_count': len(results)})
 
     @staticmethod
     def delete(request, pk=None):
         result = Image.objects.get(id=pk)
         result.delete()
         results = Image.objects.all()
-        return render(request, 'main/all_images.html', {'all_results_list': results})
+        return render(request, 'main/all_images.html', {'all_results_list': results, 'image_count': len(results)})
 
     @staticmethod
     @csrf_protect
