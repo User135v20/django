@@ -38,14 +38,3 @@ class Result(models.Model):
     diagnosis = models.CharField('Диагноз', max_length=150, null=True)
 
     created_at = models.DateTimeField(default=timezone.now)
-
-
-class Diagnosis(models.Model):
-    """"Предварительный диагноз"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ForeignKey(Image, on_delete=models.CASCADE)
-
-    diagnose = models.CharField('Предварительный диагноз', max_length=150)
-
-    def __str__(self):
-        return str(self.id)
