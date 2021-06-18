@@ -135,7 +135,8 @@ class ResultView:
             return render(request, 'main/result.html', {'result': result})
         if data:
             return render(request, 'main/update_result.html', data)
-        return render(request, 'main/update_result.html')
+        result_id = dict(request.GET).get('result_id')[0] if dict(request.GET).get('result_id') else None
+        return render(request, 'main/update_result.html', {'result_id': result_id})
 
 
 class UserView:

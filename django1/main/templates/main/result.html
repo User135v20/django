@@ -93,6 +93,10 @@
 
     </table>
 
+    <form action="{% url 'update_result' %}" method="GET">
+        <input type="hidden" name="result_id" value="{{ result.id }}" />
+        <input type="submit" value="Изменить описание">
+    </form>
     <form action="{% url 'delete_result' pk=result.id %}" method="DELETE">
         {% csrf_token %}
         <input type="submit" value="Удалить описание">
