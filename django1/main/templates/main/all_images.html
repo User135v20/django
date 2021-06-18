@@ -63,24 +63,20 @@ table {
     {% for image in all_results_list %}
     <tr class='success'>
 
-        <p>Пользователь {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }}
-            )</p>
-        <p>Снимок {{ image.id }}</p>
+        <p>Снимок {{ image.id }} (загружено пользователем {{ image.user.id }} ({{ image.user.surname }} {{ image.user.name }} {{ image.user.patronymic }} )) </p>
         <img src="{{ image.image.url}}" width="400" onclick="this.style.width='100%'"
              onmouseout="this.style.width='400px'">
 
     </tr>
     <tr>
     </tr>
-    <p>действия:</p>
+    <p></p>
     <tr class='success'>
         <form action="{% url 'all_results' %}" method="GET">
             <input type="hidden" name="image_id" value="{{ image.id }}" />
             <input type="submit" value="посмотреть описание">
         </form>
-    </tr>
-    <p></p>
-    <tr class='success'>
+
         <form action="{% url 'create_result' %}" method="GET">
             <input type="hidden" name="image_id" value="{{ image.id }}" />
             <input type="submit" value="добавить описание">
@@ -93,9 +89,7 @@ table {
             <input type="hidden" name="image_id" value="{{ image.image.url }}" />
             <button type="submit">cкачать</button>
         </form>
-    </tr>
-    <p></p>
-    <tr class='success'>
+
         <form action="{% url 'delete_image' pk=image.id %}" method="DELETE">
             {% csrf_token %}
             <input type="submit" value="удалить">
