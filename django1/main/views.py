@@ -33,7 +33,7 @@ class ResultView:
         if image_id:
             query = query.filter(image__id__contains=int(image_id))
         results = query.all()
-        print(len(results))
+
         return render(request, 'main/results.html', {'all_results_list': results})
 
     @staticmethod
@@ -207,7 +207,7 @@ class ImageView:
                 user = user[0]
                 images = []
                 for file in request.FILES.getlist('images'):
-                    print(type(file))
+                    #print(type(file))
                     data = {'image': file, 'user': user}
                     image = Image(**data)
                     image.save()
@@ -235,9 +235,13 @@ class ImageView:
         surname = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
         image_ids = False
         results_query = Result.objects
-        feature_names = ['structure_asymmetry', 'blue_white_structures', 'atypical_pigment_network', 'radial_radiance', 'points']
+        feature_names = ['structure_asymmetry', 'blue_white_structures', 'atypical_pigment_network', 'radial_radiance', 'points', 'diagnosis']
         for feature_name in feature_names:
-            bool_feature = dict(request.GET).get(feature_name)[0] == "True" if dict(request.GET).get(feature_name) else None
+            if feature_name == "diagnosis":
+                bool_feature = dict(request.GET).get(feature_name)[0] if dict(request.GET).get(feature_name) else None
+                bool_feature = bool_feature or None
+            else:
+                bool_feature = dict(request.GET).get(feature_name)[0] == "True" if dict(request.GET).get(feature_name) else None
             if bool_feature is not None:
                 results_query = results_query.filter(**{feature_name: bool_feature})
                 image_ids = True
@@ -298,7 +302,7 @@ class ImageView:
     def download_images(request):
         form = DownloadImagesForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data['urls'])
+            #(form.cleaned_data['urls'])
             urls = [base64_to_str(u) for u in json.loads(form.cleaned_data['urls'])]
             # https://overcoder.net/q/1700285/%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BD%D1%8B%D0%B9-zip-%D1%84%D0%B0%D0%B9%D0%BB-%D0%BE%D1%82-django
             buffer = io.BytesIO()
@@ -325,7 +329,7 @@ def normal_str_range():
 
 def str_to_base64(message):
     # some images has russian names
-    print(message)
+    #print(message)
     message_bytes = message.encode('utf-8')
     base64_bytes = base64.b64encode(message_bytes)
     s = base64_bytes.decode('utf-8')
