@@ -236,6 +236,7 @@ class ImageView:
         surname = dict(request.GET).get('surname')[0] if dict(request.GET).get('surname') else None
         image_ids = False
         results_query = Result.objects
+        is_filter = None
         feature_names = ['structure_asymmetry', 'blue_white_structures', 'atypical_pigment_network', 'radial_radiance', 'points', 'diagnosis']
         for feature_name in feature_names:
             if feature_name == "diagnosis":
@@ -246,6 +247,7 @@ class ImageView:
             if bool_feature is not None:
                 results_query = results_query.filter(**{feature_name: bool_feature})
                 image_ids = True
+                is_filter = True
         bool_description = dict(request.GET).get('description')[0] == "True" if dict(request.GET).get('description') else None
         if image_ids and bool_description is False:
             results = Image.objects.all()
@@ -262,7 +264,7 @@ class ImageView:
                 query = query.exclude(id__in=image_ids)
             else:
                 query = query.filter(id__in=image_ids)
-        results = query.all()
+        results = [] if is_filter is True and image_ids == [] else query.all()
         return render(request, 'main/all_images.html', {'all_results_list': results, 'urls': json.dumps([str_to_base64(image.image.url) for image in results]), 'image_count': len(results)})
 
     @staticmethod
