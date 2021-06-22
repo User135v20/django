@@ -250,6 +250,7 @@ class ImageView:
         if image_ids and bool_description is False:
             results = Image.objects.all()
             return render(request, 'main/all_images.html', {'all_results_list': results, 'image_count': len(results),
+                                                            'urls': json.dumps([str_to_base64(image.image.url) for image in results]),
                                                             'error_message': "Был задан фильт на признаки в описания и одновременно включены описания"})
         if image_ids or bool_description is not None:
             image_ids = [r.image.id for r in results_query.all()]
@@ -262,7 +263,7 @@ class ImageView:
             else:
                 query = query.filter(id__in=image_ids)
         results = query.all()
-        return render(request, 'main/all_images.html', {'all_results_list': results, 'image_count': len(results)})
+        return render(request, 'main/all_images.html', {'all_results_list': results, 'urls': json.dumps([str_to_base64(image.image.url) for image in results]), 'image_count': len(results)})
 
     @staticmethod
     def delete(request, pk=None):
