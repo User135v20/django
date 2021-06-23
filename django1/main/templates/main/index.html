@@ -2,11 +2,30 @@
 
 {% load static %}
 {% block content %}
-<h3>Главная страница</h3>
-<p> примеры изображений с отличительными признаками </p>
-
+<h1>Главная страница</h1>
+<p> Примеры изображений с отличительными признаками </p>
+<p> Ассиметрия пигментация и строения </p>
 <div>
-        <img src="{% static 'main/image/1.jpg' %}" width="30" height="30"/>
+        <img src="{% static 'main/image/first.jpg' %}"/>
 </div>
 
+<p> Наличие бело-голубых структур </p>
+<div>
+        <img src="{% static 'main/image/second.jpg' %}"/>
+</div>
+
+<p> Атипичная пигментная сеть </p>
+<div>
+        <img src="{% static 'main/image/third.jpg' %}"/>
+</div>
+
+<p> Радиальная лучистость </p>
+<div>
+        <img src="{% static 'main/image/fourth.jpg' %}"/>
+</div>
+
+<p> Наличие точек </p>
+<div>
+        <img src="{% static 'main/image/fifth.jpg' %}"/>
+</div>
 {% endblock %}
